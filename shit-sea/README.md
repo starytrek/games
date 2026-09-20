@@ -1,4 +1,4 @@
-# Morza świata – nauka i quiz
+# Morza świata - LO klasa 2 - quiz
 
 Statyczna aplikacja edukacyjna przygotowana pod GitHub Pages.
 
