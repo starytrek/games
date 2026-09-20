@@ -1,13 +1,12 @@
-# Morza świata - LO klasa 2 - quiz
+# sHIT.SEA
 
-Statyczna aplikacja edukacyjna przygotowana pod GitHub Pages.
+Interaktywny atlas i gra do nauki mórz świata.
 
-## Struktura
-- `index.html` – interfejs aplikacji
-- `css/style.css` – wygląd desktop + telefon
-- `data/seas.js` – baza mórz
-- `data/maps.js` – regiony, pozycje i etykiety
-- `data/maps/*.js` – lokalne obrazy map
-- `js/app.js` – logika nauki i quizu
+- index.html — interfejs
+- css/style.css — wygląd
+- js/app.js — logika gry
+- js/ranking.js — lokalny ranking i filtr nicków
+- data/seas.js — nazwy i regiony
+- data/maps/*.js — wektorowe mapy
 
-Aplikacja nie wymaga backendu ani zewnętrznych bibliotek. Mapy są zapisane lokalnie w repozytorium.
+Ranking działa lokalnie w localStorage. Wulgarny nick unieważnia tylko zapis bieżącego wyniku; można od razu zagrać ponownie.
