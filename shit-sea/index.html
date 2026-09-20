@@ -2,73 +2,44 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Morza świata • nauka i quiz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101d2a">
+<meta name="description" content="sHIT.SEA - atlas i gra do nauki morz swiata. Atlas i gra do nauki mórz świata.">
+<title>sHIT.SEA &middot; Morza &#347;wiata</title>
 <link rel="stylesheet" href="css/style.css">
-
 </head>
-<body class="study-mode">
-<div class="app">
- <main class="mapPane">
-  <div class="mapBadge"><span id="mapTitle">Europa</span><small id="mapNote"></small></div>
-  <svg id="mapSvg" viewBox="0 0 1500 1000" preserveAspectRatio="xMidYMid meet" aria-label="Mapa mórz">
-   <image id="mapImage" x="0" y="0" width="1500" height="1000" preserveAspectRatio="xMidYMid meet"></image>
-   <g id="markerLayer"></g>
-  </svg>
+<body>
+<div class="app" id="app">
+ <main class="map-area" id="mapArea" aria-label="Interaktywna mapa m&oacute;rz">
+  <svg id="atlas" class="atlas" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa. Wybierz niebieskie k&oacute;&#322;ko. Przyciski plus i minus zmieniaj&#261; powi&#281;kszenie." tabindex="0"><defs><clipPath id="mapClip"><rect id="clipRect"/></clipPath></defs><g id="geography" clip-path="url(#mapClip)"></g><g id="leaders"></g><g id="labels"></g><g id="markers"></g><g id="effects"></g></svg>
+  <div class="map-top"><div class="map-title"><strong id="regionTitle"></strong><small id="mapCaption"></small></div><div class="presets" id="presets" aria-label="Zbli&#380;enia mapy"></div></div>
+  <div class="zoom-tools"><button data-act="zoomIn" title="Przybli&#380; (+)" aria-label="Przybli&#380;">+</button><button data-act="zoomOut" title="Oddal (-)" aria-label="Oddal">&#8722;</button><button data-act="reset" class="reset" title="Poka&#380; ca&#322;y region (0)" aria-label="Poka&#380; ca&#322;y region">&#8962;</button><span class="zoom-value" id="zoomValue">1.0&times;</span></div>
+  <div class="map-foot"><button data-act="about">&#9432; Atlas i &#378;r&oacute;d&#322;a</button><span class="full-credit">GSHHG &middot; KSNG &middot; offline</span></div>
+  <div class="toast" id="toast" role="status"></div>
  </main>
- <aside class="side">
-  <div class="sideInner">
-   <div class="regionGrid" id="regionGrid"></div>
-   <div class="modeRow">
-    <button class="modeBtn active" data-mode="study">Nauka</button>
-    <button class="modeBtn" data-mode="game10">Gra • 10</button>
-    <button class="modeBtn" data-mode="gameAll">Pełna gra</button>
-   </div>
-   <section class="card startCard" id="startCard">
-    <div class="sectionTitle" id="startTitle">Gra • 10</div>
-    <div class="sub" id="startText">Kliknij „Graj”, żeby rozpocząć.</div>
-    <button class="primary" id="playBtn">Graj</button>
-   </section>
-   <section class="card questionCard" id="questionCard">
-    <div class="sub" id="roundLabel">Pytanie 1 z 10</div>
-    <div class="questionName" id="questionName"></div>
-    <div class="feedback" id="feedback">Kliknij właściwe kółko.</div>
-    <div class="scoreLine"><span>Punkty <b id="scoreStat">0</b></span><span>Błędy <b id="mistakeStat">0</b></span><span>Zostało <b id="leftStat">0</b></span></div>
-    <div class="progress"><i id="progressBar"></i></div>
-    <div class="gameButtons"><button class="secondary" id="skipBtn">Pomiń / pokaż</button><button class="secondary danger" id="endBtn">Zakończ grę</button></div>
-   </section>
-   <section class="card endCard" id="endCard">
-    <div class="sectionTitle" id="endTitle">Runda ukończona</div>
-    <div class="endScore" id="endScore"></div>
-    <div class="sub" id="endText"></div>
-    <div class="endActions">
-      <button class="primary" id="learnWrongBtn">Nauka tylko błędnych</button>
-      <button class="secondary" id="learnAllBtn">Nauka wszystkich od początku</button>
-      <button class="secondary" id="againBtn">Zagraj ponownie</button>
-    </div>
-   </section>
-   <section class="studyBlock" id="studyBlock">
-    <div class="card" style="padding:10px 11px">
-      <div class="sectionTitle" id="studyTitle">Ściągawka</div>
-      <div class="sub" id="studyText">Wszystkie kółka mają od razu kreseczkę i nazwę morza.</div>
-      <div class="studyTools" style="margin-top:8px"><input id="search" placeholder="Szukaj morza…" autocomplete="off"></div>
-    </div>
-    <div class="list" id="seaList"></div>
-   </section>
-   <div class="tiny">Mapa działa statycznie bez backendu. Punkty są orientacyjnymi punktami wewnątrz akwenów; nazewnictwo sprawdzone względem wykazu KSNG i aktualizacji do 24.06.2026.</div>
-  </div>
+ <aside class="side" id="side" aria-label="Sterowanie gr&#261; i lista m&oacute;rz">
+  <div class="brand-row"><div><div class="brand">sHIT.<em>SEA</em></div><div class="brand-note">Znajd&#378; sw&oacute;j kierunek</div></div><span class="offline">&#9679; offline</span><button class="sheet-close quiet" data-act="closeSheet" aria-label="Zamknij panel">&#10005;</button></div>
+  <div><div class="section-label">Wybierz map&#281;</div><select class="region-select" data-region aria-label="Region"></select></div>
+  <div class="modes" data-modes><button data-mode="study">Nauka</button><button data-mode="ten">Gra 10</button><button data-mode="full">Pe&#322;na gra</button></div>
+  <div id="desktopStage"></div><div id="fact" class="fact" hidden></div>
+  <section class="list-section"><div class="search-wrap"><input id="search" type="search" placeholder="Szukaj morza lub aliasu..." aria-label="Szukaj morza lub aliasu" autocomplete="off" spellcheck="false"><span class="glass">&#9906;</span></div><div class="listhead"><span id="listTitle">Akweny na mapie</span><span id="listCount"></span></div><div class="sea-list" id="seaList"></div></section>
+  <div class="side-footer"><span>72 nazwy &middot; 71 akwen&oacute;w</span><button class="quiet" data-act="about">Zasady / &#378;r&oacute;d&#322;a</button></div>
  </aside>
+ <div class="mobile-dock"><div class="dock-top"><span class="tiny-brand">sHIT.<span>SEA</span></span><select class="region-select" data-region aria-label="Region na telefonie"></select><button data-act="openSheet" aria-label="Otw&oacute;rz list&#281; i ustawienia">&#9776; Lista</button></div><div class="modes" data-modes><button data-mode="study">Nauka</button><button data-mode="ten">Gra 10</button><button data-mode="full">Pe&#322;na gra</button></div><div class="mobile-stage" id="mobileStage"></div></div>
 </div>
+<div class="sheet-shade" id="sheetShade" data-act="closeSheet"></div>
+<div class="modal-shade" id="modalShade" hidden><section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></section></div>
+<div id="announcer" class="sr-only" aria-live="polite"></div>
 <script src="data/seas.js"></script>
-<script src="data/maps.js"></script>
 <script src="data/maps/europe.js"></script>
 <script src="data/maps/asia.js"></script>
 <script src="data/maps/africa.js"></script>
-<script src="data/maps/north-america.js"></script>
-<script src="data/maps/south-america.js"></script>
+<script src="data/maps/northamerica.js"></script>
+<script src="data/maps/southamerica.js"></script>
 <script src="data/maps/oceania.js"></script>
 <script src="data/maps/antarctica.js"></script>
 <script src="data/maps/world.js"></script>
+<script src="js/ranking.js"></script>
 <script src="js/app.js"></script>
-
-</body></html>
+</body>
+</html>
