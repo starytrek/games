@@ -45,7 +45,7 @@ window.GeoSeaRanking=(()=>{
  };
  const cfg=()=>window.GEOSEA_BACKEND||{};
  const backendReady=()=>/^https:\/\/.+\.supabase\.co$/i.test(cfg().url||'')&&String(cfg().publishableKey||'').startsWith('sb_publishable_');
- const headers=(extra={})=>({'apikey':cfg().publishableKey,'Content-Type':'application/json',...extra});
+ const headers=(extra={})=>({'apikey':cfg().publishableKey,'Authorization':'Bearer '+cfg().publishableKey,'Content-Type':'application/json',...extra});
  const endpoint=(query='')=>cfg().url.replace(/\/$/,'')+'/rest/v1/leaderboard'+query;
  async function api(query='',options={}){
   if(!backendReady())throw new Error('Ranking globalny nie jest jeszcze podłączony.');
