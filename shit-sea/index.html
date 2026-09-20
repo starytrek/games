@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Morza świata • nauka i quiz</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="study-mode">
+<div class="app">
+ <main class="mapPane">
+  <div class="mapBadge"><span id="mapTitle">Europa</span><small id="mapNote"></small></div>
+  <svg id="mapSvg" viewBox="0 0 1500 1000" preserveAspectRatio="xMidYMid meet" aria-label="Mapa mórz">
+   <image id="mapImage" x="0" y="0" width="1500" height="1000" preserveAspectRatio="xMidYMid meet"></image>
+   <g id="markerLayer"></g>
+  </svg>
+ </main>
+ <aside class="side">
+  <div class="sideInner">
+   <div class="regionGrid" id="regionGrid"></div>
+   <div class="modeRow">
+    <button class="modeBtn active" data-mode="study">Nauka</button>
+    <button class="modeBtn" data-mode="game10">Gra • 10</button>
+    <button class="modeBtn" data-mode="gameAll">Pełna gra</button>
+   </div>
+   <section class="card startCard" id="startCard">
+    <div class="sectionTitle" id="startTitle">Gra • 10</div>
+    <div class="sub" id="startText">Kliknij „Graj”, żeby rozpocząć.</div>
+    <button class="primary" id="playBtn">Graj</button>
+   </section>
+   <section class="card questionCard" id="questionCard">
+    <div class="sub" id="roundLabel">Pytanie 1 z 10</div>
+    <div class="questionName" id="questionName"></div>
+    <div class="feedback" id="feedback">Kliknij właściwe kółko.</div>
+    <div class="scoreLine"><span>Punkty <b id="scoreStat">0</b></span><span>Błędy <b id="mistakeStat">0</b></span><span>Zostało <b id="leftStat">0</b></span></div>
+    <div class="progress"><i id="progressBar"></i></div>
+    <div class="gameButtons"><button class="secondary" id="skipBtn">Pomiń / pokaż</button><button class="secondary danger" id="endBtn">Zakończ grę</button></div>
+   </section>
+   <section class="card endCard" id="endCard">
+    <div class="sectionTitle" id="endTitle">Runda ukończona</div>
+    <div class="endScore" id="endScore"></div>
+    <div class="sub" id="endText"></div>
+    <div class="endActions">
+      <button class="primary" id="learnWrongBtn">Nauka tylko błędnych</button>
+      <button class="secondary" id="learnAllBtn">Nauka wszystkich od początku</button>
+      <button class="secondary" id="againBtn">Zagraj ponownie</button>
+    </div>
+   </section>
+   <section class="studyBlock" id="studyBlock">
+    <div class="card" style="padding:10px 11px">
+      <div class="sectionTitle" id="studyTitle">Ściągawka</div>
+      <div class="sub" id="studyText">Wszystkie kółka mają od razu kreseczkę i nazwę morza.</div>
+      <div class="studyTools" style="margin-top:8px"><input id="search" placeholder="Szukaj morza…" autocomplete="off"></div>
+    </div>
+    <div class="list" id="seaList"></div>
+   </section>
+   <div class="tiny">Mapa działa statycznie bez backendu. Punkty są orientacyjnymi punktami wewnątrz akwenów; nazewnictwo sprawdzone względem wykazu KSNG i aktualizacji do 24.06.2026.</div>
+  </div>
+ </aside>
+</div>
+<script src="data/seas.js"></script>
+<script src="data/maps.js"></script>
+<script src="data/maps/europe.js"></script>
+<script src="data/maps/asia.js"></script>
+<script src="data/maps/africa.js"></script>
+<script src="data/maps/north-america.js"></script>
+<script src="data/maps/south-america.js"></script>
+<script src="data/maps/oceania.js"></script>
+<script src="data/maps/antarctica.js"></script>
+<script src="data/maps/world.js"></script>
+<script src="js/app.js"></script>
+
+</body></html>
