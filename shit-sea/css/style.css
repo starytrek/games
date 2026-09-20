@@ -47,3 +47,30 @@ button,select{color:var(--text)}button{background:#eef4f7;border-color:#c1d1db}b
  .result-actions{margin-top:7px;gap:5px}
  .result-actions button{min-height:36px;padding:6px;font-size:10px}
 }
+
+/* Shared leaderboard */
+.leaderboard-open{width:100%;margin-top:8px;min-height:38px;border-color:#c8d8e1;background:#f7fbfd;color:#173042;font-weight:700}
+.mobile-results{margin:7px 0 0}
+.rank-actions{margin-top:7px}
+.rank-actions button{width:100%}
+.leaderboard-body{display:grid;gap:16px}
+.leaderboard-section{border:1px solid #d4e0e6;border-radius:12px;padding:10px;background:#fbfdfe}
+.leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.leaderboard-head h3{margin:0;font-size:15px}
+.leaderboard-head span{font-size:10px;color:#6f8490;text-transform:uppercase;letter-spacing:.06em}
+.ranking-table{width:100%;border-collapse:collapse}
+.ranking-table th,.ranking-table td{text-align:left;border-bottom:1px solid #e4ecef}
+.ranking-table th{font-size:9px;color:#738995;text-transform:uppercase;letter-spacing:.05em}
+.ranking-table tr.me{background:#eaf8f1}
+.ranking-table tr.me td{font-weight:700}
+.ranking-table tr.ellipsis td{text-align:center;color:#91a2aa;font-weight:700}
+.ranking-table .you{display:inline-block;margin-left:5px;padding:1px 5px;border-radius:999px;background:#d9f3e7;color:#176b4a;font-size:9px;text-transform:uppercase}
+.ranking-loading,.ranking-empty{padding:14px;text-align:center;color:#6d818d;font-size:12px}
+@media(max-width:760px){
+ .leaderboard-open{min-height:34px;font-size:11px}
+ .leaderboard-body{gap:10px}
+ .leaderboard-section{padding:7px}
+ .leaderboard-head{margin-bottom:5px}
+ .leaderboard-head h3{font-size:13px}
+ .ranking-table th,.ranking-table td{padding:4px 3px;font-size:9px}
+}
