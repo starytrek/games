@@ -30,7 +30,7 @@ function setRegion(id){if(!REGIONS[id])return;if(active()){toast('Najpierw zako\
 function loadMap(){map=DATA.maps[state.region];const g=$('geography');g.replaceChildren();$('clipRect').setAttribute('x','0');$('clipRect').setAttribute('y','0');$('clipRect').setAttribute('width',map.width);$('clipRect').setAttribute('height',map.height);
  const grid=el('path',{d:map.grid,fill:'none',stroke:'#668b99','stroke-opacity':'.16','stroke-width':'.5','vector-effect':'non-scaling-stroke'});g.append(grid);
  for(const [type,d]of Object.entries(map.paths).sort((a,b)=>+a[0]-+b[0])){g.append(el('path',{d,fill:(+type%2===1)?'#2d5059':'#102534',stroke:'#72999e','stroke-width':'.62','stroke-linejoin':'round','vector-effect':'non-scaling-stroke'}));}
- $('regionTitle').textContent=region().name;$('mapCaption').textContent=region().ids.length+' AKWEN\u00d3W \u00b7 '+region().projection;
+ $('regionTitle').textContent=region().name;$('mapCaption').textContent=region().ids.length+' AKWEN\u00d3W';
  $('presets').innerHTML=map.presets.map((p,i)=>`<button data-preset="${i}">${esc(p.label)}</button>`).join('');resizeMap(true);
 }
 function resizeMap(reset=false){let rect=$('atlas').getBoundingClientRect();if(rect.width<2||rect.height<2)return;let previousZoom=zoomLevel();size={w:rect.width,h:rect.height};baseU=Math.max(map.width/Math.max(100,size.w-42),map.height/Math.max(100,size.h-100));if(reset){cam={cx:map.width/2,cy:map.height/2,u:baseU};}else cam.u=baseU/Math.max(1,Math.min(22,previousZoom));draw();}
