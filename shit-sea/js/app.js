@@ -30,7 +30,7 @@ function setRegion(id){if(!REGIONS[id])return;if(active()){toast('Najpierw zako\
 function loadMap(){map=DATA.maps[state.region];const g=$('geography');g.replaceChildren();$('clipRect').setAttribute('x','0');$('clipRect').setAttribute('y','0');$('clipRect').setAttribute('width',map.width);$('clipRect').setAttribute('height',map.height);
  const grid=el('path',{d:map.grid,fill:'none',stroke:'#668b99','stroke-opacity':'.16','stroke-width':'.5','vector-effect':'non-scaling-stroke'});g.append(grid);
  for(const [type,d]of Object.entries(map.paths).sort((a,b)=>+a[0]-+b[0])){g.append(el('path',{d,fill:(+type%2===1)?'#2d5059':'#102534',stroke:'#72999e','stroke-width':'.62','stroke-linejoin':'round','vector-effect':'non-scaling-stroke'}));}
- $('regionTitle').textContent=region().name;$('mapCaption').textContent=region().ids.length+' AKWEN\u00d3W';
+ $('regionTitle').textContent=region().name;const count=$('regionSeaCount');if(count)count.textContent=region().ids.length;
  $('presets').innerHTML=map.presets.map((p,i)=>`<button data-preset="${i}">${esc(p.label)}</button>`).join('');resizeMap(true);
 }
 function resizeMap(reset=false){let rect=$('atlas').getBoundingClientRect();if(rect.width<2||rect.height<2)return;let previousZoom=zoomLevel();size={w:rect.width,h:rect.height};baseU=Math.max(map.width/Math.max(100,size.w-42),map.height/Math.max(100,size.h-100));if(reset){cam={cx:map.width/2,cy:map.height/2,u:baseU};}else cam.u=baseU/Math.max(1,Math.min(22,previousZoom));draw();}
@@ -39,7 +39,7 @@ function setZoom(factor,x=size.w/2,y=size.h/2){let z=Math.max(1,Math.min(22,zoom
 function focusAt(p,z){cam={cx:p[0],cy:p[1],u:baseU/Math.max(1,Math.min(22,z))};clampCamera();draw();}
 function clampCamera(){cam.cx=Math.max(-map.width*.25,Math.min(map.width*1.25,cam.cx));cam.cy=Math.max(-map.height*.25,Math.min(map.height*1.25,cam.cy));}
 function requestDraw(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;draw();});}
-function draw(){if(!map)return;const vb=[cam.cx-size.w*cam.u/2,cam.cy-size.h*cam.u/2,size.w*cam.u,size.h*cam.u];$('atlas').setAttribute('viewBox',vb.join(' '));$('zoomValue').textContent=zoomLevel().toFixed(1)+'\u00d7';drawLabels();drawMarkers();}
+function draw(){if(!map)return;const vb=[cam.cx-size.w*cam.u/2,cam.cy-size.h*cam.u/2,size.w*cam.u,size.h*cam.u];$('atlas').setAttribute('viewBox',vb.join(' '));drawLabels();drawMarkers();}
 function drawMarkers(){const root=$('markers');root.replaceChildren();const study=state.phase==='study';const phone=isPhone();const hit=phone?19:15;
  // All hits go through one nearest-point resolver, never SVG stacking order.
  for(const id of region().ids){const p=point(id),sc=screen(p);if(sc[0]<-30||sc[0]>size.w+30||sc[1]<-30||sc[1]>size.h+30)continue;let solved=state.solved.has(id);let selected=study&&state.selected===id;let crowded=region().ids.some(other=>other!==id&&Math.hypot(...screen(point(other)).map((v,k)=>v-sc[k]))<24);let radius=(crowded?3.8:5.2)*cam.u;
