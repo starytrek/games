@@ -7,13 +7,14 @@
 <meta name="description" content="sHIT.SEA - atlas i gra do nauki morz swiata. Atlas i gra do nauki mórz świata.">
 <title>sHIT.SEA &middot; Morza &#347;wiata</title>
 <link rel="stylesheet" href="css/style.css">
+<style>.portal-return{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid #547388;border-radius:9px;background:#102332;color:#d9edff;font:600 12px system-ui,sans-serif;text-decoration:none;pointer-events:auto}.portal-return:hover{background:#263e50}.portal-return:focus-visible{outline:3px solid #8dceff;outline-offset:3px}.map-foot{flex-wrap:wrap}</style>
 </head>
 <body>
 <div class="app" id="app">
  <main class="map-area" id="mapArea" aria-label="Interaktywna mapa m&oacute;rz">
   <svg id="atlas" class="atlas" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa. Wybierz niebieskie k&oacute;&#322;ko. Przyciski plus i minus zmieniaj&#261; powi&#281;kszenie." tabindex="0"><defs><clipPath id="mapClip"><rect id="clipRect"/></clipPath></defs><g id="geography" clip-path="url(#mapClip)"></g><g id="leaders"></g><g id="labels"></g><g id="markers"></g><g id="effects"></g></svg>
   <div class="map-top"><button data-act="reset" class="region-fit" title="Poka&#380; ca&#322;&#261; map&#281; regionu (0)" aria-label="Poka&#380; ca&#322;&#261; map&#281; regionu"><span id="regionTitle"></span></button><div class="presets" id="presets" aria-label="Fragmenty mapy"></div><div class="map-controls"><button data-act="zoomIn" class="map-control zoom-control" title="Przybli&#380; (+)" aria-label="Przybli&#380;">+</button><button data-act="zoomOut" class="map-control zoom-control" title="Oddal (-)" aria-label="Oddal">&#8722;</button></div></div>
-  <div class="map-foot"><button data-act="about">&#9432; Atlas i &#378;r&oacute;d&#322;a</button><span class="full-credit">GSHHG &middot; KSNG</span></div>
+  <div class="map-foot"><a class="portal-return" href="https://starytrek.github.io/">← Powrót na stronę główną</a><button data-act="about">&#9432; Atlas i &#378;r&oacute;d&#322;a</button><span class="full-credit">GSHHG &middot; KSNG</span></div>
   <div class="toast" id="toast" role="status"></div>
  </main>
  <aside class="side" id="side" aria-label="Sterowanie gr&#261; i lista m&oacute;rz">
