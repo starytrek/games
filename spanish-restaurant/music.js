@@ -1,7 +1,28 @@
-// Original synthesized instrumental: swung drums, bass and soft jazz chords.
-let clubAudio=null,clubMusicTimer=null,clubMusicStep=0,clubMusicOn=false;
-function clubNote(frequency,time,duration,gain,type='sine'){const o=clubAudio.createOscillator(),a=clubAudio.createGain();o.type=type;o.frequency.value=frequency;a.gain.setValueAtTime(0,time);a.gain.linearRampToValueAtTime(gain,time+.012);a.gain.exponentialRampToValueAtTime(.0001,time+duration);o.connect(a);a.connect(clubAudio.destination);o.start(time);o.stop(time+duration+.03);}
-function clubBeat(){if(!clubMusicOn)return;const t=clubAudio.currentTime+.02,s=clubMusicStep++%32;const bass=[65.41,65.41,77.78,87.31][Math.floor(s/8)];if(s%4===0)clubNote(bass,t,.32,.07,'triangle');if(s%8===0){clubNote(110,t,.16,.085);clubNote(54,t+.025,.22,.06);const chords=[[261.63,311.13,392,466.16],[233.08,293.66,349.23,440]][Math.floor(s/16)];chords.forEach(f=>clubNote(f,t,.65,.015,'triangle'));}if(s%8===4){clubNote(180,t,.08,.025,'triangle');clubNote(310,t,.07,.017,'triangle');}if(s%2===0)clubNote(4700,t,.025,.007,'square');if(s%8===6)clubNote([523.25,622.25,698.46,466.16][Math.floor(s/8)],t,.19,.014,'sine');clubMusicTimer=setTimeout(clubBeat,s%2?164:197);}
-function stopClubMusic(){clubMusicOn=false;clearTimeout(clubMusicTimer);if(clubAudio)clubAudio.suspend();document.body.classList.remove('music-on');document.getElementById('music').textContent='♫ Muzyka: wyłączona';document.getElementById('music').setAttribute('aria-pressed','false');}
-document.getElementById('music').onclick=async()=>{if(clubMusicOn){stopClubMusic();return;}const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio){document.getElementById('music').textContent='Muzyka niedostępna';return;}try{clubAudio=clubAudio||new Audio();await clubAudio.resume();clubMusicOn=true;clubMusicStep=0;document.body.classList.add('music-on');document.getElementById('music').textContent='♫ Jazz × hip-hop: gra';document.getElementById('music').setAttribute('aria-pressed','true');clubBeat();}catch{stopClubMusic();}};
+// Full instrumental recordings by Kevin MacLeod, CC BY 4.0.
+const CLUB_TRACKS=[
+ {name:'Jazz Brunch',mood:'Jazz · nocny stolik'},
+ {name:'Intractable',mood:'Soul & light funk'},
+ {name:'Cold Funk',mood:'Funk · mocny groove'},
+ {name:'Chillin Hard',mood:'Chill hip-hop'},
+ {name:'Griphop',mood:'Hip-hop · ciężki beat'}
+];
+const musicButton=document.getElementById('music'),trackPicker=document.getElementById('music-track'),clubPlayer=document.getElementById('club-player'),musicStatus=document.getElementById('music-status');
+let clubMusicOn=false,clubPlayRequest=0;
+clubPlayer.volume=.32;
+CLUB_TRACKS.forEach((t,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${t.mood} — ${t.name}`;trackPicker.append(o);});
+try{const chosen=Number(localStorage.getItem('naukogramy.restaurant.track'));if(Number.isInteger(chosen)&&chosen>=0&&chosen<5)trackPicker.value=String(chosen);}catch{}
+function clubTrack(){return CLUB_TRACKS[Number(trackPicker.value)||0];}
+function clubSource(){const t=clubTrack();clubPlayer.src='https://incompetech.com/music/royalty-free/mp3-royaltyfree/'+encodeURIComponent(t.name)+'.mp3';}
+function clubState(on){clubMusicOn=on;document.body.classList.toggle('music-on',on);musicButton.textContent=(on?'Ⅱ ':'▶ ')+clubTrack().name;musicButton.title=(on?'Wstrzymaj':'Odtwórz')+' · '+(Number(trackPicker.value)+1)+'/5';musicButton.setAttribute('aria-pressed',String(on));}
+function stopClubMusic(){++clubPlayRequest;clubPlayer.pause();clubState(false);musicStatus.textContent='';}
+async function playClubMusic(){const request=++clubPlayRequest;musicStatus.textContent='';clubState(true);try{await clubPlayer.play();if(request!==clubPlayRequest)return;clubState(true);musicStatus.textContent='';}catch{if(request!==clubPlayRequest)return;clubState(false);musicStatus.textContent='Nie udało się odtworzyć. Wybierz inny utwór lub spróbuj ponownie.';}}
+clubPlayer.addEventListener('playing',()=>{if(clubMusicOn)musicStatus.textContent='';});
+clubSource();
+musicButton.onclick=()=>clubMusicOn?stopClubMusic():playClubMusic();
+trackPicker.onchange=()=>{const resume=clubMusicOn;stopClubMusic();clubSource();try{localStorage.setItem('naukogramy.restaurant.track',trackPicker.value);}catch{}clubState(false);if(resume)playClubMusic();};
+function switchClubTrack(delta){trackPicker.value=String((Number(trackPicker.value)+delta+CLUB_TRACKS.length)%CLUB_TRACKS.length);trackPicker.onchange();}
+document.getElementById('music-prev').onclick=()=>switchClubTrack(-1);
+document.getElementById('music-next').onclick=()=>switchClubTrack(1);
+clubState(false);
+clubPlayer.addEventListener('error',()=>{if(clubMusicOn){stopClubMusic();musicStatus.textContent='Nagranie jest niedostępne. Wybierz inny utwór.';}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&clubMusicOn)stopClubMusic();});
