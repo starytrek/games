@@ -1,4 +1,4 @@
-# Starytrek · Nauka
+# NaukoGramy · Nauka
 
 Portal z testami interaktywnymi i grą geograficzną. Zwykłe HTML, bez instalacji i kompilowania.
 
