@@ -16,14 +16,17 @@ function round(){if(!session)return;session.selected=[];session.answered=false;s
 if(['stock','orders','rush'].includes(mode)){
  const targets=[];
  if(mode==='stock')targets.push(weighted(FOODS.slice(0,20)).id);
- else targets.push(...guestMeal(session.guest));
+ else targets.push(...guestMeal(session.guest,1+session.round%4),DRINK_FOODS[session.round%DRINK_FOODS.length]);
  session.answer=targets;
- session.orderText=mode==='stock'?'Necesito '+short(targets[0])+', por favor.':'Quiero '+short(targets[0])+' con '+short(targets[1])+' y '+short(targets[2])+', por favor.';
+ const meal=targets.filter(id=>foodSlot(id)!=='drink'),drink=targets.find(id=>foodSlot(id)==='drink');
+ const mealText=meal.length===1?short(meal[0]):short(meal[0])+' con '+meal.slice(1).map(short).join(' y ');
+ session.orderText=mode==='stock'?'Necesito '+short(targets[0])+', por favor.':'Quiero '+mealText+' y, para beber, '+short(drink)+', por favor.';
  const pool=mode==='stock'?FOODS.slice(0,20):FOODS.filter(f=>[...MAIN_FOODS,...STARCH_FOODS,...VEG_FOODS].includes(f.id));
- session.options=shuffle([...targets,...shuffle(pool.filter(f=>!targets.includes(f.id))).slice(0,(mode==='stock'?6:9)-targets.length).map(f=>f.id)]);
+ const foodOptions=shuffle([...meal,...shuffle(pool.filter(f=>!meal.includes(f.id))).slice(0,(mode==='stock'?6:9)-meal.length).map(f=>f.id)]);
+ session.options=mode==='stock'?foodOptions:[...foodOptions,...DRINK_FOODS];
  $('stage').innerHTML=customer(session.orderText,mode==='stock'?'ZNAJDŹ PRODUKT':'ZAMÓWIENIE')+``+renderKitchen();
  document.querySelectorAll('[data-food]').forEach(b=>{b.onclick=()=>toggleFood(b.dataset.food);b.ondragstart=e=>e.dataTransfer.setData('text/plain',b.dataset.food);});
- $('plate').ondragover=e=>e.preventDefault();$('plate').ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain');if(session.options.includes(id)&&!session.selected.includes(id))toggleFood(id);};
+ for(const target of [$('plate'),$('served-drinks')].filter(Boolean)){target.ondragover=e=>e.preventDefault();target.ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain');if(session.options.includes(id)&&!session.selected.includes(id))toggleFood(id);};}
  plate();
 }
 else if(mode==='dialog'){session.q=uniqueQuestion(DIALOGS);session.answer=session.q.a;session.orderText=session.q.a.join(' ');session.options=shuffle([...session.q.a,...session.q.d]).map((text,i)=>({text,i}));$('stage').innerHTML=customer(session.q.q,'ROZMOWA PO HISZPAŃSKU')+'<div id="assembled" class="assembled"></div><div id="tiles" class="tiles"></div>';tiles();}
@@ -36,7 +39,7 @@ function bindChoices(){document.querySelectorAll('[data-choice]').forEach(b=>b.o
 function toggleFood(id){if(!session||session.answered||!session.options.includes(id))return;
  const source=document.querySelector(`[data-food="${id}"]`),box=source?.getBoundingClientRect?.();const origin=box?{x:box.left+box.width/2,y:box.top+box.height/2}:null;
  const at=session.selected.indexOf(id);let replaced=null;
- if(at<0){const slot=foodSlot(id);if(['main','starch'].includes(slot)&&session.mode!=='stock'){replaced=session.selected.find(other=>foodSlot(other)===slot);session.selected=session.selected.filter(other=>foodSlot(other)!==slot);}if(session.mode==='stock')session.selected=[];session.selected.push(id);}else session.selected.splice(at,1);
+ if(at<0){const slot=foodSlot(id);if(['main','starch','drink'].includes(slot)&&session.mode!=='stock'){replaced=session.selected.find(other=>foodSlot(other)===slot);session.selected=session.selected.filter(other=>foodSlot(other)!==slot);}if(session.mode==='stock')session.selected=[];session.selected.push(id);}else session.selected.splice(at,1);
  plate(id,origin);
  if(replaced)feedback('Zmieniono składnik. Reszta zestawu zostaje.','hint');
 
