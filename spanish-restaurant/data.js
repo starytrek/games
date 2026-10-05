@@ -2,7 +2,9 @@
 const FOODS = [
 ['aceite','el aceite de oliva','oliwa','🫒'],['pepino','el pepino','ogórek','🥒'],['platano','el plátano','banan','🍌'],['manzana','la manzana','jabłko','🍎'],['yogur','el yogur','jogurt','🥛'],['pan','el pan','chleb','🍞'],['jamon','el jamón','szynka','🍖'],['galleta','la galleta','herbatnik','🍪'],['naranja','la naranja','pomarańcza','🍊'],['pescado','el pescado','ryba','🐟'],['leche','la leche','mleko','🥛'],['carne','la carne','mięso','🥩'],['huevo','el huevo','jajko','🥚'],['lechuga','la lechuga','sałata','🥬'],['tomate','el tomate','pomidor','🍅'],['queso','el queso','ser','🧀'],['arroz','el arroz','ryż','🍚'],['fresa','la fresa','truskawka','🍓'],['mantequilla','la mantequilla','masło','🧈'],['patata','la patata','ziemniak','🥔'],['pasta','la pasta','makaron','🍝'],['pimiento','el pimiento','papryka','🫑'],['cebolla','la cebolla','cebula','🧅'],['aceitunas','las aceitunas','oliwki','🫒'],['uvas','las uvas','winogrona','🍇'],['brocoli','el brócoli','brokuł','🥦'],['legumbres','las legumbres','warzywa strączkowe','🫘']
 ].map(([id,es,pl,emoji])=>({id,es,pl,emoji}));
+FOODS.push({id:'chuleta',es:'la chuleta empanada',pl:'schabowy',emoji:'🥩'},{id:'picada',es:'la hamburguesa de carne picada',pl:'kotlet mielony',emoji:'🥩'},{id:'fritas',es:'las patatas fritas',pl:'frytki',emoji:'🍟'});
 const MODES=[
+['compose','👩‍🍳','STOLIK GABY · BEZ POŚPIECHU','Skomponuj danie','Schabowy, ziemniaki i surówka? Ty wybierasz.'],
 ['stock','📦','01 · ROZGRZEWKA','Magazyn kuchenny','Rozpoznawaj produkty. Bez pośpiechu.'],
 ['orders','🍽️','02 · PIERWSI GOŚCIE','Na talerz!','Zamówienia z dwóch i trzech składników.'],
 ['dialog','💬','03 · PRZY STOLIKU','Porozmawiajmy','Układaj zdania: gustar i częstotliwość.'],
