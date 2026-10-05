@@ -22,7 +22,7 @@ if(['stock','orders','rush'].includes(mode)){
  const mealText=meal.length===1?short(meal[0]):short(meal[0])+' con '+meal.slice(1).map(short).join(' y ');
  session.orderText=mode==='stock'?'Necesito '+short(targets[0])+', por favor.':'Quiero '+mealText+' y, para beber, '+short(drink)+', por favor.';
  const pool=mode==='stock'?FOODS.slice(0,20):FOODS.filter(f=>[...MAIN_FOODS,...STARCH_FOODS,...VEG_FOODS].includes(f.id));
- const foodOptions=shuffle([...meal,...shuffle(pool.filter(f=>!meal.includes(f.id))).slice(0,(mode==='stock'?6:9)-meal.length).map(f=>f.id)]);
+ const foodOptions=shuffle([...meal,...shuffle(pool.filter(f=>!meal.includes(f.id))).slice(0,(mode==='stock'?6:10)-meal.length).map(f=>f.id)]);
  session.options=mode==='stock'?foodOptions:[...foodOptions,...DRINK_FOODS];
  $('stage').innerHTML=customer(session.orderText,mode==='stock'?'ZNAJDŹ PRODUKT':'ZAMÓWIENIE')+``+renderKitchen();
  document.querySelectorAll('[data-food]').forEach(b=>{b.onclick=()=>toggleFood(b.dataset.food);b.ondragstart=e=>e.dataTransfer.setData('text/plain',b.dataset.food);});
