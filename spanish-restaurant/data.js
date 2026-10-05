@@ -3,13 +3,9 @@ const FOODS = [
 ['aceite','el aceite de oliva','oliwa','🫒'],['pepino','el pepino','ogórek','🥒'],['platano','el plátano','banan','🍌'],['manzana','la manzana','jabłko','🍎'],['yogur','el yogur','jogurt','🥛'],['pan','el pan','chleb','🍞'],['jamon','el jamón','szynka','🍖'],['galleta','la galleta','herbatnik','🍪'],['naranja','la naranja','pomarańcza','🍊'],['pescado','el pescado','ryba','🐟'],['leche','la leche','mleko','🥛'],['carne','la carne','mięso','🥩'],['huevo','el huevo','jajko','🥚'],['lechuga','la lechuga','sałata','🥬'],['tomate','el tomate','pomidor','🍅'],['queso','el queso','ser','🧀'],['arroz','el arroz','ryż','🍚'],['fresa','la fresa','truskawka','🍓'],['mantequilla','la mantequilla','masło','🧈'],['patata','la patata','ziemniak','🥔'],['pasta','la pasta','makaron','🍝'],['pimiento','el pimiento','papryka','🫑'],['cebolla','la cebolla','cebula','🧅'],['aceitunas','las aceitunas','oliwki','🫒'],['uvas','las uvas','winogrona','🍇'],['brocoli','el brócoli','brokuł','🥦'],['legumbres','las legumbres','warzywa strączkowe','🫘'],['agua','el agua','woda','💧'],['te','el té','herbata','🍵'],['cafe','el café','kawa','☕'],['zumo','el zumo de naranja','sok pomarańczowy','🍊'],['limonada','la limonada','lemoniada','🍋']
 ].map(([id,es,pl,emoji])=>({id,es,pl,emoji}));
 const MODES=[
-['stock','📦','01 · ROZGRZEWKA','Magazyn kuchenny','Rozpoznawaj produkty. Bez pośpiechu.'],
-['orders','🍽️','02 · PIERWSI GOŚCIE','Na talerz!','Dania z 1–4 składników i napoje.'],
-['dialog','💬','03 · PRZY STOLIKU','Porozmawiajmy','Układaj zdania: gustar i częstotliwość.'],
-['menu','📋','04 · MENU DNIA','Szefowa kuchni','Dobierz danie do życzenia klienta.'],
-['lunch','🥡','05 · KUCHNIA ŚWIATA','Poleć lunchbox','Wybierz posiłek i uzasadnij wybór.'],
-['rush','🔥','06 · WIELKI FINAŁ','Godziny szczytu','10 gości, 90 sekund i 3 serduszka.'],
-['blogs','📱','BONUS · PO PRACY','Blogowy detektyw','Czytaj opisy i znajdź temat bloga.']
+['stock','📦','01 · ROZGRZEWKA','Magazyn','Rozpoznawaj produkty. Bez pośpiechu.'],
+['orders','🍽️','02 · RESTAURACJA','Zamówienia','Dania z 1–4 składników i napoje.'],
+['dialog','💬','03 · PRZY STOLIKU','Rozmowa','Układaj zdania po hiszpańsku.']
 ].map(([id,icon,kicker,title,desc])=>({id,icon,kicker,title,desc}));
 const DIALOGS=[
 {q:'Powiedz: Lubię jeść jajka.',a:['Me gusta','comer','huevos.'],d:['Me gustan','como'],why:'Me gusta comer huevos: lubię czynność (comer), dlatego gusta. Przy samym los huevos używamy gustan.'},
