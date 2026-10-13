@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict');
+const T=require('../akademia-zarodnikow/expedition.js');
+const C=require('../akademia-zarodnikow/trail.js');
+const p={complete:[],facts:{},stars:400};T.init(p);
+const nodes=[300,700,1100];
+assert.equal(C.gems(0,nodes).length,9);
+assert.equal(C.collect(p,0,0,300,nodes,300).length,3);
+assert.equal(C.collect(p,0,300,0,nodes,300).length,0);
+assert.equal(C.collect(p,0,0,1100,nodes,300).length,0,'locked section stays locked');
+assert.equal(C.forge(p),true);assert.equal(C.balance(p),0);assert.equal(C.forge(p),false);assert.equal(p.expedition.potions.length,1);
+const restored=JSON.parse(JSON.stringify(p));T.init(restored);C.init(restored);
+assert.equal(C.collect(restored,0,0,300,nodes,300).length,0);assert.equal(C.balance(restored),0);assert.equal(restored.stars,400);
+assert.equal(C.collect(restored,0,300,1100,nodes,1100).length,6,'skip or reduced motion crosses every collectible');
+for(let w=1;w<6;w++)assert.equal(C.collect(restored,w,0,1100,nodes,1100).length,9);
+assert.equal(C.init(restored).collected.length,54);assert.equal(C.balance(restored),51);
+const old={complete:['0:0'],facts:{},stars:1234,expedition:{rooms:{'0:1':{found:[1],placed:[]}}}};T.init(old);C.init(old);
+assert.equal(C.balance(old),4);assert.equal(old.stars,1234);assert.deepEqual(old.complete,['0:0']);assert(old.expedition.fragments.includes('0:0'));assert.equal(C.collect(old,0,300,700,nodes,700).length,2);
+console.log('PASS: 54 unique crystals, locked path, reverse walking, skipped movement, reload, spending once, old discoveries preserved');

@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEKTOR 5 · NaukoGramy</title>
+<meta name="description" content="Fabularna gra FPP 3D z chemii dla 8 klasy: kwas azotowy(V), fosforowy(V) i najważniejsze wiadomości o kwasach.">
+<style>
+:root{--ink:#eef7ff;--muted:#9eb3c7;--line:#2e4d65;--cyan:#55d8ff;--good:#49d07f;--bad:#ff7373;--amber:#ffc45c}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#05090d;color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}button,a{font:inherit}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:3}
+.top{position:absolute;left:12px;right:12px;top:12px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.box{background:#07131ee8;border:1px solid var(--line);border-radius:12px;padding:9px 12px;box-shadow:0 12px 35px #0009;backdrop-filter:blur(7px)}
+.brand{font-weight:900;letter-spacing:.12em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.18em;margin-top:2px}
+.stats{display:flex;gap:14px;flex-wrap:wrap;font-size:12px}.stats b{color:#fff}
+#objective{position:absolute;left:12px;bottom:14px;width:min(470px,calc(100% - 24px));background:#07131ee8;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+#objective b{display:block;color:var(--cyan);font-size:11px;letter-spacing:.1em;margin-bottom:3px}
+#prompt{position:absolute;left:50%;bottom:76px;transform:translateX(-50%);background:#07131ef2;border:1px solid #52748d;border-radius:10px;padding:8px 12px;font-weight:800;opacity:0;transition:.15s}
+#cross{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}#cross:before,#cross:after{content:"";position:absolute;background:#ffffffc9}#cross:before{left:0;top:8px;width:18px;height:2px}#cross:after{left:8px;top:0;width:2px;height:18px}
+#start,#dialog,#finish,#levelcard{position:fixed;inset:0;z-index:7;display:grid;place-items:center;padding:20px;background:#02070be2}#dialog[hidden],#finish[hidden],#levelcard[hidden],#start[hidden]{display:none}
+.card{width:min(820px,100%);max-height:90vh;overflow:auto;background:#091621;border:1px solid #35546c;border-radius:18px;padding:24px;box-shadow:0 35px 90px #000c}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}h1{font-size:clamp(38px,7vw,68px);letter-spacing:-2px;line-height:.98;margin:8px 0 14px}h2{font-size:28px;margin:5px 0 10px}.lead{font-size:18px;color:#cbdbe8}.muted{color:var(--muted)}.story{margin:16px 0;border-left:3px solid var(--cyan);padding:9px 0 9px 14px;color:#dce9f4}
+.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.key{background:#0d2130;border:1px solid #35536a;border-radius:10px;padding:10px;text-align:center}.key b{display:block;font-size:18px}
+.primary,.secondary,.answer{border-radius:10px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{border:1px solid #3d7899;background:#12354c;color:#fff}.primary:hover{background:#194862}.secondary{border:1px solid #566c7e;background:#0c1720;color:#eaf4fc;text-decoration:none}.answer{width:100%;text-align:left;border:1px solid #36566d;background:#0e2231;color:#eef7ff}.answer:hover{background:#153349}.answer.good{border-color:#4aa56c;background:#123a25}.answer.bad{border-color:#b55353;background:#421919}.answer:disabled{cursor:default}
+.answers{display:grid;gap:9px;margin-top:16px}.feedback{margin-top:13px;border:1px solid #355269;background:#0f202d;border-radius:10px;padding:11px 13px}.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.progress{height:8px;border-radius:99px;background:#13293a;overflow:hidden;margin:12px 0 3px}.progress i{display:block;height:100%;background:var(--cyan);width:0;transition:.2s}.qcount{font-size:12px;color:var(--muted)}.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{border:1px solid #38566c;background:#0b1c28;border-radius:999px;padding:5px 9px;font-size:12px;color:#bdd0df}.warning{color:var(--amber)}
+@media(max-width:700px){.controls{grid-template-columns:repeat(2,1fr)}.stats{gap:8px}.card{padding:18px}.top{gap:6px}.box{padding:8px 9px}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <div class="top">
+    <div class="box brand">SEKTOR 5<small>PROTOKÓŁ AWARYJNY</small></div>
+    <div class="box stats"><span>PKT <b id="score">0</b></span><span>DOWODY <b id="evidence">0/6</b></span><span>PYTANIA <b id="qdone">0</b></span><span>POZIOM <b id="level">A</b></span></div>
+  </div>
+  <div id="cross"></div>
+  <div id="prompt">E — interakcja</div>
+  <div id="objective"><b>AKTUALNY CEL</b><span id="objectiveText">Uruchom terminal wejściowy.</span></div>
+</div>
+
+<div id="start">
+  <div class="card">
+    <div class="eyebrow">NaukoGramy · Chemia · Krzysiek · 8 klasa</div>
+    <h1>SEKTOR 5</h1>
+    <p class="lead">O 02:17 ktoś włamał się do podziemnego laboratorium. Zmieniono oznaczenia próbek HNO₃ i H₃PO₄, uszkodzono terminale i odcięto trzy poziomy obiektu.</p>
+    <div class="story"><b>CERBER:</b> „Autoryzacja awaryjna przyznana. Odzyskaj sześć dowodów, przejdź wszystkie trzy poziomy i ustal, które dane zostały sfałszowane.”</div>
+    <div class="controls"><div class="key"><b>WASD</b>ruch</div><div class="key"><b>MYSZ</b>rozglądanie</div><div class="key"><b>E</b>interakcja</div><div class="key"><b>ESC</b>uwolnij mysz</div></div>
+    <div class="badges"><span class="badge">3 poziomy</span><span class="badge">6 różnych stref</span><span class="badge">ponad 30 pytań w banku</span><span class="badge">losowane zestawy</span></div>
+    <p class="muted">Gra najlepiej działa na komputerze. Po rozpoczęciu kliknij planszę, aby przejąć mysz.</p>
+    <button class="primary" id="startBtn">Wejdź do SEKTORA 5</button>
+  </div>
+</div>
+
+<div id="levelcard" hidden>
+  <div class="card">
+    <div class="eyebrow" id="levelEyebrow">POZIOM A</div>
+    <h1 id="levelTitle">BLOK WEJŚCIOWY</h1>
+    <p class="lead" id="levelText"></p>
+    <div class="story" id="levelStory"></div>
+    <button class="primary" id="levelBtn">Wejdź</button>
+  </div>
+</div>
+
+<div id="dialog" hidden>
+  <div class="card">
+    <div class="eyebrow" id="dialogTag">TERMINAL</div>
+    <h2 id="dialogTitle"></h2>
+    <p class="lead" id="dialogText"></p>
+    <div class="progress"><i id="qbar"></i></div><div class="qcount" id="qcount"></div>
+    <div class="answers" id="answers"></div>
+    <div id="feedback" class="feedback" hidden></div>
+    <div class="row"><button class="primary" id="nextBtn" hidden>Następne</button><button class="secondary" id="closeBtn">Zamknij</button></div>
+  </div>
+</div>
+
+<div id="finish" hidden>
+  <div class="card">
+    <div class="eyebrow">MISJA ZAKOŃCZONA</div>
+    <h1>SEKTOR 5 ODBLOKOWANY</h1>
+    <p class="lead" id="finalText"></p>
+    <div class="story"><b>CERBER:</b> „Fałszywe oznaczenia usunięte. Dane HNO₃ i H₃PO₄ odzyskane. Sektor wraca pod kontrolę.”</div>
+    <div class="row"><button class="primary" id="restartBtn">Zagraj ponownie</button><a class="secondary" href="../../">Wróć do NaukoGramy</a></div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js";
+
+const canvas=document.getElementById("c");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x071019);
+scene.fog=new THREE.Fog(0x071019,10,38);
+const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.08,80);
+camera.rotation.order="YXZ";
+let yaw=0,pitch=0,started=false,stage=0,score=0,evidence=0,qDone=0,activeStation=null,activeQuestions=[],qIndex=0,stationCorrect=0;
+const keys={};
+const player={x:0,z:7,y:1.65};
+const colliders=[];
+const stations=[];
+const world=new THREE.Group();scene.add(world);
+const objective=document.getElementById("objectiveText"),promptEl=document.getElementById("prompt");
+
+const LEVELS=[
+ {code:"A",title:"BLOK WEJŚCIOWY",text:"Recepcja, punkt kontroli dostępu i magazyn próbek.",story:"Światła awaryjne działają. W magazynie znaleziono otwartą szafę z kwasami.",objective:"Uruchom terminal wejściowy, a potem sprawdź magazyn próbek."},
+ {code:"B",title:"LABORATORIUM ANALITYCZNE",text:"Stoły laboratoryjne, analizator i archiwum dokumentacji.",story:"Część raportów została podmieniona. Na tablicy ktoś zostawił błędny wzór H₃PO₃.",objective:"Sprawdź analizator i odzyskaj prawidłowy raport H₃PO₄."},
+ {code:"C",title:"SEKTOR NARUSZONY",text:"Zdewastowany korytarz po włamaniu i sterownia CERBER.",story:"Drzwi są wyłamane, monitory zniszczone. Na ścianie sprayem napisano: „CERBER KŁAMIE”.",objective:"Przejdź przez zdewastowany sektor i uruchom terminal CERBER."}
+];
+
+const Q=[
+ {t:"Który wzór ma kwas azotowy(V)?",a:["HNO₃","HNO₂","H₃PO₄","H₂SO₄"],c:0,e:"Kwas azotowy(V) ma wzór HNO₃.",g:"nitric"},
+ {t:"Który wzór ma kwas fosforowy(V)?",a:["H₃PO₄","H₃PO₃","HPO₄","H₂PO₄"],c:0,e:"Kwas fosforowy(V) ma wzór H₃PO₄.",g:"phosphoric"},
+ {t:"Jaka jest reszta kwasowa kwasu azotowego(V)?",a:["NO₃","NO₂","PO₄","SO₄"],c:0,e:"W HNO₃ resztą kwasową jest NO₃.",g:"nitric"},
+ {t:"Jaka jest reszta kwasowa kwasu fosforowego(V)?",a:["PO₄","PO₃","NO₃","SO₃"],c:0,e:"W H₃PO₄ resztą kwasową jest PO₄.",g:"phosphoric"},
+ {t:"Ile atomów wodoru zawiera cząsteczka H₃PO₄?",a:["1","2","3","4"],c:2,e:"Indeks 3 przy H oznacza trzy atomy wodoru.",g:"phosphoric"},
+ {t:"Ile atomów tlenu zawiera HNO₃?",a:["1","2","3","4"],c:2,e:"Indeks 3 przy O oznacza trzy atomy tlenu.",g:"nitric"},
+ {t:"Ile atomów tlenu zawiera H₃PO₄?",a:["2","3","4","5"],c:2,e:"H₃PO₄ zawiera cztery atomy tlenu.",g:"phosphoric"},
+ {t:"Który z tych kwasów jest tlenowy?",a:["HNO₃","HCl","HBr","H₂S"],c:0,e:"HNO₃ zawiera tlen, więc jest kwasem tlenowym.",g:"nitric"},
+ {t:"Który z tych kwasów jest także kwasem tlenowym?",a:["H₃PO₄","HCl","HBr","HF"],c:0,e:"H₃PO₄ zawiera tlen.",g:"phosphoric"},
+ {t:"Który zapis jest poprawny?",a:["kwas azotowy(V) — HNO₃","kwas azotowy(V) — HNO₂","kwas azotowy(V) — H₃PO₄","kwas azotowy(V) — HCl"],c:0,e:"HNO₃ to kwas azotowy(V).",g:"nitric"},
+ {t:"Który zapis jest poprawny?",a:["kwas fosforowy(V) — H₃PO₄","kwas fosforowy(V) — H₃PO₃","kwas fosforowy(V) — HNO₃","kwas fosforowy(V) — H₂SO₄"],c:0,e:"H₃PO₄ to kwas fosforowy(V).",g:"phosphoric"},
+ {t:"Co oznacza liczba V w nazwie „kwas azotowy(V)”?",a:["wartościowość azotu w szkolnym nazewnictwie","liczbę atomów wodoru","liczbę cząsteczek","pH kwasu"],c:0,e:"V odnosi się do wartościowości/stopnia utlenienia atomu centralnego w szkolnym nazewnictwie.",g:"general"},
+ {t:"Co oznacza V w nazwie „kwas fosforowy(V)”?",a:["wartościowość fosforu w szkolnym nazewnictwie","pięć atomów wodoru","pięć atomów tlenu","pięć reszt kwasowych"],c:0,e:"V dotyczy atomu fosforu, nie liczby atomów w cząsteczce.",g:"general"},
+ {t:"Który kwas ma jeden atom wodoru w cząsteczce?",a:["HNO₃","H₃PO₄","H₂SO₄","H₂CO₃"],c:0,e:"HNO₃ ma jeden atom wodoru.",g:"compare"},
+ {t:"Który kwas ma trzy atomy wodoru w cząsteczce?",a:["H₃PO₄","HNO₃","HCl","H₂SO₄"],c:0,e:"H₃PO₄ ma trzy atomy wodoru.",g:"compare"},
+ {t:"Która para zawiera wyłącznie kwasy tlenowe?",a:["HNO₃ i H₃PO₄","HCl i HNO₃","HBr i HCl","H₂S i HCl"],c:0,e:"Oba kwasy zawierają atomy tlenu.",g:"compare"},
+ {t:"Wskaż błędny zapis.",a:["H₃PO₃ — kwas fosforowy(V)","H₃PO₄ — kwas fosforowy(V)","HNO₃ — kwas azotowy(V)","NO₃ — reszta kwasowa HNO₃"],c:0,e:"H₃PO₃ nie jest wzorem kwasu fosforowego(V).",g:"report"},
+ {t:"W raporcie zapisano „HNO₂ — kwas azotowy(V)”. Co poprawić?",a:["HNO₂ na HNO₃","HNO₂ na H₃PO₄","V na VI","nic"],c:0,e:"Kwas azotowy(V) to HNO₃.",g:"report"},
+ {t:"Który wzór zawiera resztę fosforanową(V) PO₄?",a:["H₃PO₄","HNO₃","H₂SO₃","HCl"],c:0,e:"Reszta PO₄ występuje w H₃PO₄.",g:"phosphoric"},
+ {t:"Który wzór zawiera resztę azotanową(V) NO₃?",a:["HNO₃","HNO₂","H₃PO₄","H₂CO₃"],c:0,e:"Reszta NO₃ występuje w HNO₃.",g:"nitric"},
+ {t:"Jak nazywa się HNO₃?",a:["kwas azotowy(V)","kwas azotawy(III)","kwas fosforowy(V)","kwas siarkowy(VI)"],c:0,e:"HNO₃ to kwas azotowy(V).",g:"nitric"},
+ {t:"Jak nazywa się H₃PO₄?",a:["kwas fosforowy(V)","kwas fosforawy(III)","kwas azotowy(V)","kwas węglowy"],c:0,e:"H₃PO₄ to kwas fosforowy(V).",g:"phosphoric"},
+ {t:"Który kwas kojarzy się z produkcją nawozów i związków azotu?",a:["HNO₃","HCl","H₂S","HF"],c:0,e:"Kwas azotowy(V) jest ważnym surowcem m.in. przy produkcji nawozów.",g:"use"},
+ {t:"Który kwas jest ważnym surowcem przy produkcji nawozów fosforowych?",a:["H₃PO₄","HCl","HNO₂","H₂S"],c:0,e:"Kwas fosforowy(V) i jego sole są ważne w produkcji nawozów fosforowych.",g:"use"},
+ {t:"Której informacji NIE należy używać jako bezpiecznej metody rozpoznawania kwasu?",a:["smaku","etykiety","wzoru chemicznego","dokumentacji"],c:0,e:"Substancji laboratoryjnych nie rozpoznajemy przez smakowanie.",g:"safety"},
+ {t:"Co robisz z nieznaną butelką w laboratorium?",a:["czytasz etykietę i postępujesz zgodnie z zasadami bezpieczeństwa","wąchasz z bliska","próbujesz kropli","mieszasz z inną"],c:0,e:"Nieznanych substancji nie próbujemy ani nie mieszamy bez instrukcji.",g:"safety"},
+ {t:"Który zapis pokazuje łącznie 8 atomów w jednej cząsteczce?",a:["H₃PO₄","HNO₃","HCl","H₂S"],c:0,e:"H₃PO₄: 3 H + 1 P + 4 O = 8 atomów.",g:"count"},
+ {t:"Ile atomów łącznie ma HNO₃?",a:["5","4","3","6"],c:0,e:"1 H + 1 N + 3 O = 5 atomów.",g:"count"},
+ {t:"Ile atomów łącznie ma H₃PO₄?",a:["8","7","6","9"],c:0,e:"3 H + 1 P + 4 O = 8 atomów.",g:"count"},
+ {t:"Która para reszta kwasowa — kwas jest poprawna?",a:["NO₃ — HNO₃","PO₄ — HNO₃","NO₂ — H₃PO₄","SO₄ — HCl"],c:0,e:"NO₃ jest resztą kwasową kwasu HNO₃.",g:"compare"},
+ {t:"Która para reszta kwasowa — kwas jest poprawna?",a:["PO₄ — H₃PO₄","NO₃ — H₃PO₄","PO₃ — HNO₃","Cl — H₃PO₄"],c:0,e:"PO₄ jest resztą kwasową H₃PO₄.",g:"compare"},
+ {t:"Który dokument wygląda podejrzanie?",a:["H₃PO₄ → kwas fosforowy(V), reszta PO₄","HNO₃ → kwas azotowy(V), reszta NO₃","H₃PO₄ → kwas fosforowy(V), reszta NO₃","HNO₃ → kwas tlenowy"],c:2,e:"H₃PO₄ ma resztę PO₄, nie NO₃.",g:"report"},
+ {t:"Który zestaw jest całkowicie poprawny?",a:["HNO₃ — NO₃ — kwas azotowy(V)","HNO₃ — PO₄ — kwas azotowy(V)","H₃PO₄ — NO₃ — kwas fosforowy(V)","H₃PO₃ — PO₄ — kwas fosforowy(V)"],c:0,e:"W HNO₃ resztą jest NO₃, a nazwa to kwas azotowy(V).",g:"final"},
+ {t:"Który zestaw jest całkowicie poprawny?",a:["H₃PO₄ — PO₄ — kwas fosforowy(V)","H₃PO₄ — NO₃ — kwas fosforowy(V)","HNO₃ — PO₄ — kwas azotowy(V)","H₃PO₃ — PO₄ — kwas fosforowy(V)"],c:0,e:"H₃PO₄ ma resztę PO₄ i nazwę kwas fosforowy(V).",g:"final"}
+];
+
+function randQuestions(count,groups=[]){
+ const pool=Q.filter(q=>!groups.length||groups.includes(q.g));
+ for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+ return pool.slice(0,count);
+}
+
+function mat(color,rough=.75,metal=.08){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal})}
+const M={wall:mat(0x6f8191,.82),dark:mat(0x26313a,.9),floor:mat(0x2d3940,.8),white:mat(0xe7edf0,.7),steel:mat(0x667985,.35,.55),red:mat(0xb22f39,.6),green:mat(0x3c8c63,.7),blue:mat(0x2d73a9,.65),yellow:mat(0xc79b34,.68),orange:mat(0xd66c2c,.68),purple:mat(0x684b8f,.7),cyan:mat(0x2b9fbe,.58),black:mat(0x11161a,.8)};
+
+function clearWorld(){
+ while(world.children.length){const o=world.children.pop();o.traverse(x=>{if(x.geometry)x.geometry.dispose()})}
+ colliders.length=0;stations.length=0;
+}
+function box(x,y,z,w,h,d,material=M.wall,solid=true){
+ const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;world.add(mesh);
+ if(solid)colliders.push(new THREE.Box3().setFromObject(mesh));
+ return mesh;
+}
+function floor(w=24,d=24,color=0x283138){
+ const m=mat(color,.88);const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,d),m);mesh.rotation.x=-Math.PI/2;mesh.receiveShadow=true;world.add(mesh);return mesh;
+}
+function wall(x,z,w,d,h=3.6,material=M.wall){return box(x,h/2,z,w,h,d,material,true)}
+function textTexture(text,bg="#111820",fg="#e8f6ff",accent="#55d8ff"){
+ const c=document.createElement("canvas");c.width=768;c.height=256;const x=c.getContext("2d");x.fillStyle=bg;x.fillRect(0,0,c.width,c.height);x.fillStyle=accent;x.fillRect(0,0,18,c.height);x.fillStyle=fg;x.font="bold 58px system-ui";x.textAlign="center";x.textBaseline="middle";x.fillText(text,c.width/2,c.height/2);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;
+}
+function sign(text,x,y,z,ry=0,w=2.8,h=.9,bg="#111820",fg="#e8f6ff",accent="#55d8ff"){
+ const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:textTexture(text,bg,fg,accent)}));mesh.position.set(x,y,z);mesh.rotation.y=ry;world.add(mesh);return mesh;
+}
+function graffiti(text,x,y,z,ry=0,color="#ff5252"){
+ const c=document.createElement("canvas");c.width=1024;c.height=256;const g=c.getContext("2d");g.clearRect(0,0,1024,256);g.font="900 86px Arial";g.textAlign="center";g.textBaseline="middle";g.fillStyle=color;g.rotate(-.025);g.fillText(text,512,128);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+ const mesh=new THREE.Mesh(new THREE.PlaneGeometry(4.8,1.2),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false}));mesh.position.set(x,y,z);mesh.rotation.y=ry;world.add(mesh);
+}
+function desk(x,z,ry=0){
+ const g=new THREE.Group();const top=new THREE.Mesh(new THREE.BoxGeometry(2.4,.13,.8),M.steel);top.position.y=.9;g.add(top);
+ for(const dx of [-1,1]){const leg=new THREE.Mesh(new THREE.BoxGeometry(.12,.9,.12),M.dark);leg.position.set(dx,.43,0);g.add(leg)}
+ g.position.set(x,0,z);g.rotation.y=ry;g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});world.add(g);
+}
+function shelf(x,z,ry=0){
+ const g=new THREE.Group();for(let y=.35;y<2.3;y+=.58){const s=new THREE.Mesh(new THREE.BoxGeometry(2.2,.09,.55),M.steel);s.position.y=y;g.add(s)}
+ for(const dx of [-1.05,1.05]){const p=new THREE.Mesh(new THREE.BoxGeometry(.1,2.35,.1),M.dark);p.position.set(dx,1.15,0);g.add(p)}
+ g.position.set(x,0,z);g.rotation.y=ry;world.add(g);
+}
+function bottle(x,z,color=0x80d2ff,scale=1){
+ const body=new THREE.Mesh(new THREE.CylinderGeometry(.1*scale,.13*scale,.38*scale,16),new THREE.MeshStandardMaterial({color,transparent:true,opacity:.72,roughness:.2}));body.position.set(x,.25*scale,z);world.add(body);
+}
+function monitor(x,z,ry=0,broken=false){
+ const g=new THREE.Group();const body=new THREE.Mesh(new THREE.BoxGeometry(.9,.58,.08),M.black);body.position.y=1.28;g.add(body);
+ const screen=new THREE.Mesh(new THREE.PlaneGeometry(.76,.44),new THREE.MeshBasicMaterial({color:broken?0x351010:0x0c92b5}));screen.position.set(0,1.28,.045);g.add(screen);
+ const stand=new THREE.Mesh(new THREE.BoxGeometry(.12,.45,.12),M.dark);stand.position.y=.82;g.add(stand);g.position.set(x,0,z);g.rotation.y=ry;world.add(g);
+}
+function crate(x,z,rot=0){const c=box(x,.3,z,.72,.6,.72,M.yellow,false);c.rotation.y=rot;return c}
+function lamp(x,z,color=0xff2c2c,intensity=4){const l=new THREE.PointLight(color,intensity,7,2);l.position.set(x,2.7,z);world.add(l);return l}
+function station(id,title,tag,x,z,groups,count=3){
+ const base=box(x,.65,z,.75,1.3,.48,M.black,false);const scolor=tag==="STEROWNIA"?0xff3c3c:tag==="ARCHIWUM"?0xb16cff:tag==="MAGAZYN"?0xffc44d:0x18c9ef;const scr=new THREE.Mesh(new THREE.PlaneGeometry(.58,.36),new THREE.MeshStandardMaterial({color:scolor,emissive:scolor,emissiveIntensity:2.2,roughness:.25}));scr.position.set(x,1.02,z-.245);world.add(scr);
+ stations.push({id,title,tag,pos:new THREE.Vector3(x,0,z),groups,count,done:false});
+}
+function ceilingLight(x,z,color=0xc7ecff,intensity=1.5){const l=new THREE.RectAreaLight(color,intensity,3,1);l.position.set(x,3.1,z);l.rotation.x=-Math.PI/2;world.add(l)}
+
+function floorZone(x,z,w,d,color,opacity=.92){
+ const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshStandardMaterial({color,roughness:.7,transparent:true,opacity}));
+ mesh.rotation.x=-Math.PI/2;mesh.position.set(x,.006,z);mesh.receiveShadow=true;world.add(mesh);return mesh;
+}
+function hazardStrip(x,z,w,d,rot=0){
+ const g=new THREE.Group();
+ for(let i=0;i<10;i++){const m=new THREE.Mesh(new THREE.BoxGeometry(w/10,.018,d),i%2?M.yellow:M.black);m.position.x=-w/2+w/20+i*w/10;g.add(m)}
+ g.position.set(x,.02,z);g.rotation.y=rot;world.add(g);return g;
+}
+function doorFrame(x,z,ry=0,color=0x2d73a9,label=""){
+ const g=new THREE.Group();
+ const mm=new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.35});
+ const a=new THREE.Mesh(new THREE.BoxGeometry(.16,2.8,.18),mm),b=a.clone(),top=new THREE.Mesh(new THREE.BoxGeometry(1.8,.16,.18),mm);
+ a.position.set(-.82,1.4,0);b.position.set(.82,1.4,0);top.position.set(0,2.72,0);g.add(a,b,top);
+ g.position.set(x,0,z);g.rotation.y=ry;world.add(g);
+ if(label){const sx=x+Math.sin(ry)*.11,sz=z+Math.cos(ry)*.11;sign(label,sx,2.45,sz,ry,1.55,.36,"#10161d","#ffffff",color===0xb22f39?"#ff5151":"#55d8ff")}
+ return g;
+}
+function beacon(x,z,color=0xff3030){
+ const pole=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.35,12),M.dark);pole.position.set(x,2.72,z);world.add(pole);
+ const bulb=new THREE.Mesh(new THREE.SphereGeometry(.12,14,10),new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:3}));bulb.position.set(x,2.95,z);world.add(bulb);
+ const l=new THREE.PointLight(color,4.2,7,2);l.position.set(x,2.75,z);world.add(l);return l;
+}
+function glowingPanel(text,x,y,z,ry,color="#00d9ff"){
+ const c=document.createElement("canvas");c.width=768;c.height=256;const g=c.getContext("2d");g.fillStyle="#061018";g.fillRect(0,0,768,256);g.strokeStyle=color;g.lineWidth=12;g.strokeRect(10,10,748,236);g.fillStyle=color;g.font="900 54px system-ui";g.textAlign="center";g.textBaseline="middle";g.fillText(text,384,128);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const m=new THREE.Mesh(new THREE.PlaneGeometry(2.6,.86),new THREE.MeshBasicMaterial({map:t}));m.position.set(x,y,z);m.rotation.y=ry;world.add(m);return m;
+}
+
+function commonLights(){
+ scene.children.filter(o=>o.isLight&&o!==scene.children[0]).forEach(()=>{});
+ const hemi=new THREE.HemisphereLight(0xb7d8ee,0x182028,1.15);world.add(hemi);
+ const d=new THREE.DirectionalLight(0xcbe8ff,1.1);d.position.set(4,8,4);d.castShadow=true;world.add(d);
+}
+
+function buildA(){
+ clearWorld();scene.background.set(0x08141d);scene.fog.color.set(0x08141d);floor(26,22,0x263139);commonLights();floorZone(-8,4,7,9,0x234f70,.55);floorZone(8,-5,8,8,0x5a4720,.48);floorZone(2,5,4,4,0x3c2757,.42);
+ wall(0,-10,26,.4);wall(0,10,26,.4);wall(-13,0,.4,20);wall(13,0,.4,20);
+ wall(-4,-2,.35,10);wall(5,3,.35,13);wall(8,-3,10,.35);
+ sign("SEKTOR 5",0,2.4,-9.78,0,4,1,"#0c1b26","#ffffff","#48d7ff");sign("MAGAZYN PRÓBEK",8.7,2.2,-2.8,0,3.2,.7,"#211c12","#ffe2a0","#ffc45c");doorFrame(-4,-2,0,0x2d73a9,"LAB A");doorFrame(5,3,0,0xc79b34,"MAGAZYN");hazardStrip(7.8,-2.6,4.5,.55,0);glowingPanel("DOSTĘP A",-2.1,1.7,-1.79,0,"#59d8ff");
+ desk(-8,6);monitor(-8,5.55);desk(-8,2);monitor(-8,1.55);shelf(9,-6);shelf(9,-5,Math.PI);shelf(11,-6);
+ for(let i=0;i<9;i++)bottle(8+(i%3)*.5,-6.4+Math.floor(i/3)*.45,i%2?0xa9e264:0x7dd7ff,.9);
+ crate(2,5,.3);crate(3,5.4,-.4);ceilingLight(-7,2);ceilingLight(1,2);ceilingLight(9,-5);
+ station("a1","Terminal wejściowy","AUTORYZACJA",-10,7,["general","nitric","compare"],3);
+ station("a2","Rejestr próbek","MAGAZYN",10,-7,["nitric","safety","count"],3);
+ beacon(12,-8,0xff3030);beacon(-11,-8,0xffb12e);lamp(-6,7,0x2dafff,2.4);player.x=-10;player.z=8;yaw=0;
+}
+function buildB(){
+ clearWorld();scene.background.set(0x0b1115);scene.fog.color.set(0x0b1115);floor(28,24,0x30383d);commonLights();floorZone(-7,6,12,7,0x215d68,.42);floorZone(9,6,7,8,0x664b1d,.38);floorZone(-9,-5,7,7,0x3b2a5f,.38);
+ wall(0,-11,28,.4,M.white);wall(0,11,28,.4,M.white);wall(-14,0,.4,22,M.white);wall(14,0,.4,22,M.white);
+ wall(0,1,18,.3,M.white);wall(-5,-5,.3,12,M.white);wall(7,-5,.3,12,M.white);
+ sign("LABORATORIUM ANALITYCZNE",-1,2.3,-10.78,0,5.5,.8,"#e9eef0","#17242d","#17a7d0");doorFrame(-5,-5,0,0x2b9fbe,"ANALIZA");doorFrame(7,-5,0,0x684b8f,"ARCHIWUM");hazardStrip(-1,1.2,6,.55,0);glowingPanel("ANALIZATOR",-9.7,1.8,-6.72,0,"#3ce6ff");
+ sign("ARCHIWUM",10,2.2,1.18,Math.PI,2.6,.7,"#1d252a","#e8edf0","#ffc45c");
+ for(const x of [-9,-5,-1,3]){desk(x,6);monitor(x,5.55,false)}
+ for(let x=-10;x<=4;x+=2){bottle(x,4.8,0x8fd5ff);bottle(x+.3,4.8,0xf1d277)}
+ shelf(10,7);shelf(10,5);shelf(12,6,Math.PI/2);crate(11,9,.2);
+ graffiti("H3PO3 ?",2,2.2,1.16,Math.PI,"#d93434");
+ sign("NIEZGODNOŚĆ DANYCH",1,1.7,-.88,0,3.5,.65,"#331516","#ffdcdc","#ff5151");
+ ceilingLight(-8,7,0xbfeeff,2.2);ceilingLight(0,7,0xbfeeff,2.2);ceilingLight(8,7,0xffdda0,1.8);ceilingLight(-9,-5,0xd7c7ff,1.7);ceilingLight(9,-5,0xbfeeff,2);beacon(12,9,0xffa629);
+ station("b1","Analizator substancji","ANALIZATOR",-10,-7,["phosphoric","compare","count"],3);
+ station("b2","Archiwum raportów","ARCHIWUM",10,8,["report","phosphoric","use"],3);
+ player.x=0;player.z=9;yaw=Math.PI;
+}
+function buildC(){
+ clearWorld();scene.background.set(0x0a0a0c);scene.fog.color.set(0x0a0a0c);floor(30,24,0x202326);commonLights();floorZone(-10,5,7,8,0x5c1d24,.42);floorZone(10,-6,7,8,0x1f4568,.35);floorZone(0,0,6,5,0x5b3717,.28);
+ wall(0,-11,30,.4,M.dark);wall(0,11,30,.4,M.dark);wall(-15,0,.4,22,M.dark);wall(15,0,.4,22,M.dark);
+ wall(-6,-3,.35,12,M.dark);wall(5,3,.35,14,M.dark);wall(1,-4,12,.35,M.dark);
+ graffiti("CERBER KŁAMIE",-1,2.2,-10.76,0,"#ff3939");graffiti("NO3 ≠ PO4",8,2.0,10.76,Math.PI,"#ffb02e");graffiti("WYJDŹ",11,1.9,-10.74,0,"#8d5cff");doorFrame(-6,-3,0,0xb22f39,"STREFA X");doorFrame(5,3,0,0xd66c2c,"STEROWNIA");hazardStrip(-5.5,-2.7,4.5,.6,0);hazardStrip(5.5,2.7,4.5,.6,0);
+ sign("STEROWNIA",-10,2.2,3,Math.PI/2,2.7,.75,"#18191b","#d9f5ff","#ff3d3d");
+ for(let i=0;i<5;i++){crate(-2+i*.9,6+(i%2)*.6,i*.35)}
+ desk(9,-7,.2);monitor(9,-7.45,.2,true);desk(9,-4,-.35);monitor(9,-4.45,-.35,true);
+ box(2,.15,-7,2.6,.3,.7,M.dark,false).rotation.z=.18;
+ const broken=box(-3,.55,-6,.1,1.1,2.3,M.steel,false);broken.rotation.z=1.1;
+ beacon(-12,7,0xff1f1f);beacon(12,-8,0xff1f1f);beacon(0,0,0xff7a1a);lamp(-8,-6,0x7f4cff,2.6);lamp(9,7,0x247cff,2.6);glowingPanel("CERBER",-10.6,2.0,5.78,0,"#ff4545");
+ station("c1","Terminal bezpieczeństwa","SEKTOR NARUSZONY",11,-8,["safety","report","compare"],3);
+ station("c2","CERBER — protokół końcowy","STEROWNIA",-11,6,["final","nitric","phosphoric","report"],5);
+ player.x=12;player.z=8;yaw=Math.PI;
+}
+
+function showLevelCard(){
+ const L=LEVELS[stage];document.getElementById("levelEyebrow").textContent="POZIOM "+L.code;document.getElementById("levelTitle").textContent=L.title;document.getElementById("levelText").textContent=L.text;document.getElementById("levelStory").textContent=L.story;document.getElementById("levelcard").hidden=false;document.exitPointerLock?.();
+}
+function enterLevel(){
+ document.getElementById("levelcard").hidden=true;document.getElementById("level").textContent=LEVELS[stage].code;objective.textContent=LEVELS[stage].objective;
+ if(stage===0)buildA();else if(stage===1)buildB();else buildC();resize();started=true;canvas.requestPointerLock().catch(()=>{});
+}
+function stageComplete(){
+ if(stage<2){stage++;showLevelCard()}else finishGame();
+}
+function currentIncomplete(){return stations.filter(s=>!s.done)}
+
+function openStation(s){
+ activeStation=s;activeQuestions=randQuestions(s.count,s.groups);qIndex=0;stationCorrect=0;document.exitPointerLock?.();document.getElementById("dialog").hidden=false;document.getElementById("dialogTag").textContent=s.tag;document.getElementById("dialogTitle").textContent=s.title;renderQuestion();
+}
+function renderQuestion(){
+ const q=activeQuestions[qIndex];document.getElementById("dialogText").textContent=q.t;document.getElementById("qcount").textContent="Pytanie "+(qIndex+1)+" z "+activeQuestions.length;document.getElementById("qbar").style.width=((qIndex)/activeQuestions.length*100)+"%";
+ const box=document.getElementById("answers");box.replaceChildren();document.getElementById("feedback").hidden=true;document.getElementById("nextBtn").hidden=true;
+ q.a.forEach((txt,i)=>{const b=document.createElement("button");b.className="answer";b.textContent=txt;b.onclick=()=>answerQuestion(i,b);box.appendChild(b)});
+}
+function answerQuestion(i,b){
+ const q=activeQuestions[qIndex],buttons=[...document.querySelectorAll(".answer")];buttons.forEach(x=>x.disabled=true);buttons[q.c].classList.add("good");qDone++;document.getElementById("qdone").textContent=qDone;
+ const ok=i===q.c;if(ok){stationCorrect++;score+=10}else b.classList.add("bad");document.getElementById("score").textContent=score;
+ const fb=document.getElementById("feedback");fb.textContent=(ok?"Dobrze. ":"Nie tym razem. ")+q.e;fb.hidden=false;document.getElementById("nextBtn").hidden=false;document.getElementById("qbar").style.width=((qIndex+1)/activeQuestions.length*100)+"%";
+}
+function nextQuestion(){
+ qIndex++;if(qIndex<activeQuestions.length){renderQuestion();return}
+ activeStation.done=true;evidence++;document.getElementById("evidence").textContent=evidence+"/6";score+=stationCorrect===activeQuestions.length?15:5;document.getElementById("score").textContent=score;
+ document.getElementById("dialog").hidden=true;activeStation=null;
+ const left=currentIncomplete();
+ if(!left.length){objective.textContent="Poziom oczyszczony. Przejdź do następnej strefy.";setTimeout(stageComplete,500)}
+ else{objective.textContent="Pozostał terminal: "+left[0].title+".";canvas.requestPointerLock().catch(()=>{})}
+}
+function finishGame(){
+ started=false;document.exitPointerLock?.();const max=qDone*10+6*15;const pct=max?Math.round(score/max*100):0;const best=Number(localStorage.getItem("naukogramy.sektor5.best3d")||0);if(score>best)localStorage.setItem("naukogramy.sektor5.best3d",String(score));
+ document.getElementById("finalText").textContent="Wynik: "+score+" pkt · rozwiązane pytania: "+qDone+" · odzyskane dowody: "+evidence+"/6. "+(pct>=85?"Bardzo mocne przejście.":pct>=65?"Misja zaliczona — kilka rzeczy warto jeszcze powtórzyć.":"Misja ukończona, ale wzory i reszty kwasowe wymagają powtórki.");
+ document.getElementById("finish").hidden=false;
+}
+
+function nearestStation(){
+ let best=null,bd=2.2;for(const s of stations){if(s.done)continue;const d=Math.hypot(player.x-s.pos.x,player.z-s.pos.z);if(d<bd){bd=d;best=s}}return best;
+}
+function updatePrompt(){promptEl.style.opacity=nearestStation()?1:0}
+function collide(nx,nz){
+ const r=.32;const p=new THREE.Box3(new THREE.Vector3(nx-r,.1,nz-r),new THREE.Vector3(nx+r,1.8,nz+r));return colliders.some(c=>c.intersectsBox(p));
+}
+function updateMovement(dt){
+ const speed=(keys.shiftleft||keys.shift)?5.2:3.4;let dx=0,dz=0;
+ if(keys.keyw||keys.w){dx-=Math.sin(yaw);dz-=Math.cos(yaw)}
+ if(keys.keys||keys.s){dx+=Math.sin(yaw);dz+=Math.cos(yaw)}
+ if(keys.keya||keys.a){dx-=Math.cos(yaw);dz+=Math.sin(yaw)}
+ if(keys.keyd||keys.d){dx+=Math.cos(yaw);dz-=Math.sin(yaw)}
+ const len=Math.hypot(dx,dz)||1;dx=dx/len*speed*dt;dz=dz/len*speed*dt;
+ if(!collide(player.x+dx,player.z))player.x+=dx;if(!collide(player.x,player.z+dz))player.z+=dz;
+ camera.position.set(player.x,player.y,player.z);camera.rotation.y=yaw;camera.rotation.x=pitch;
+}
+function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener("resize",resize);resize();
+addEventListener("keydown",e=>{const k=e.key.toLowerCase();keys[k]=true;keys[e.code.toLowerCase()]=true;if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright"].includes(k))e.preventDefault();if(k==="e"&&started&&!activeStation){const s=nearestStation();if(s)openStation(s)}});
+addEventListener("keyup",e=>{keys[e.key.toLowerCase()]=false;keys[e.code.toLowerCase()]=false});
+addEventListener("mousemove",e=>{if(document.pointerLockElement===canvas&&started){yaw-=e.movementX*.0022;pitch-=e.movementY*.0022;pitch=Math.max(-1.25,Math.min(1.25,pitch))}});
+canvas.addEventListener("click",()=>{if(started&&document.pointerLockElement!==canvas&&!activeStation)canvas.requestPointerLock().catch(()=>{})});
+document.getElementById("startBtn").onclick=()=>{document.getElementById("start").hidden=true;stage=0;showLevelCard()};
+document.getElementById("levelBtn").onclick=enterLevel;
+document.getElementById("nextBtn").onclick=nextQuestion;
+document.getElementById("closeBtn").onclick=()=>{document.getElementById("dialog").hidden=true;activeStation=null;canvas.requestPointerLock().catch(()=>{})};
+document.getElementById("restartBtn").onclick=()=>location.reload();
+
+let last=performance.now();
+function loop(now){const dt=Math.min(.04,(now-last)/1000);last=now;if(started){updateMovement(dt);updatePrompt()}renderer.render(scene,camera);requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

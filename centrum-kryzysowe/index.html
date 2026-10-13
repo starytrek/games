@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Centrum Kryzysowe · NaukoGramy</title>
+<meta name="description" content="Gra EDB: rodzaje zagrożeń, służby, organizacje międzynarodowe i Siły Zbrojne RP.">
+<style>
+:root{--bg:#eef3f8;--panel:#fff;--ink:#142238;--muted:#5e6d81;--line:#d6dfeb;--blue:#165d9c;--navy:#0d2d4d;--good:#18794e;--bad:#b42318;--warn:#b76e00}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(180deg,#e8f0f7,#f6f8fb 45%);color:var(--ink)}
+button,a{font:inherit}button{cursor:pointer}.wrap{width:min(980px,calc(100% - 28px));margin:auto}.top{background:var(--navy);color:#fff;border-bottom:4px solid #dfe8f1}.top .wrap{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:800;text-decoration:none;color:#fff}.brand span{opacity:.7;font-weight:500}.back{color:#dce9f6;text-decoration:none;font-size:14px}
+main{padding:28px 0 50px}.hero{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 12px 34px #16324a12}.eyebrow{font-size:13px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:var(--blue)}h1{margin:5px 0 8px;font-size:clamp(30px,6vw,48px);line-height:1.08;letter-spacing:-1.5px}.lead{color:var(--muted);max-width:720px;margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.stat{background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
+.progress{height:11px;background:#dce5ef;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s ease}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:18px}.screen[hidden]{display:none}.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.level{border:1px solid var(--line);border-radius:15px;padding:18px;background:#fbfcfe}.level h2{font-size:20px;margin:0 0 6px}.level p{font-size:14px;color:var(--muted);min-height:64px}.level button,.primary{border:0;background:var(--blue);color:#fff;font-weight:750;border-radius:10px;padding:11px 15px}.level button:hover,.primary:hover{background:#0f4c82}.missiontag{display:inline-flex;align-items:center;gap:8px;background:#eaf2f9;color:#174e7c;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:750}.question{font-size:clamp(22px,4vw,31px);line-height:1.25;margin:18px 0}.context{color:var(--muted);margin:-8px 0 18px}.answers{display:grid;gap:10px}.answer{width:100%;text-align:left;border:1px solid #bdc9d7;background:#fff;border-radius:12px;padding:14px 16px;color:var(--ink);font-weight:650}.answer:hover{border-color:#6f8dab;background:#f7fafc}.answer.correct{border-color:#6dbb94;background:#e9f7ef;color:#12603c}.answer.wrong{border-color:#e0a4a0;background:#fff0ee;color:#8f1f17}.answer:disabled{cursor:default}.feedback{margin-top:14px;border-radius:12px;padding:13px 15px;font-weight:650}.feedback.good{background:#e9f7ef;color:#12603c}.feedback.bad{background:#fff0ee;color:#8f1f17}.feedback small{display:block;font-weight:500;margin-top:4px}.nextrow{display:flex;justify-content:flex-end;margin-top:14px}
+.result{text-align:center;padding:12px 0}.result .big{font-size:54px;font-weight:900;line-height:1}.result h2{font-size:28px;margin:12px 0 5px}.result p{color:var(--muted)}.result-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.secondary{border:1px solid #aab9ca;background:#fff;color:var(--ink);font-weight:700;border-radius:10px;padding:11px 15px}
+.cheatsheet{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}.cheat{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}.cheat b{display:block;margin-bottom:4px}.cheat span{color:var(--muted);font-size:14px}
+footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.levels,.cheatsheet{grid-template-columns:1fr}.level p{min-height:0}.hero,.panel{padding:18px}.top .wrap{min-height:62px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="../../">NaukoGramy <span>/ EDB</span></a><a class="back" href="../../">← Wróć do materiałów</a></div></header>
+<main class="wrap">
+<section class="hero">
+<div class="eyebrow">Symulator EDB</div>
+<h1>Centrum Kryzysowe</h1>
+<p class="lead">Podejmuj decyzje podczas alarmów. Rozpoznawaj zagrożenia, wybieraj służby, rozszyfrowuj organizacje i dowódź właściwym rodzajem Sił Zbrojnych RP.</p>
+<div class="stats"><div class="stat"><b id="score">0</b><span>punkty</span></div><div class="stat"><b id="lives">3</b><span>bezpieczeństwo</span></div><div class="stat"><b id="step">0/0</b><span>decyzje</span></div><div class="stat"><b id="best">0</b><span>rekord</span></div></div>
+<div class="progress" aria-label="Postęp misji"><i id="bar"></i></div>
+</section>
+
+<section class="panel screen" id="start">
+<h2>Wybierz poziom</h2>
+<div class="levels">
+<div class="level"><h2>1. Rekrut</h2><p>Skróty, służby, numery alarmowe i podstawowy podział zagrożeń.</p><button data-level="rekrut">Rozpocznij</button></div>
+<div class="level"><h2>2. Dowódca</h2><p>Krótkie sytuacje kryzysowe. Musisz wybrać właściwe działanie i służbę.</p><button data-level="dowodca">Rozpocznij</button></div>
+<div class="level"><h2>3. Sztab Kryzysowy</h2><p>Najtrudniejsze decyzje: organizacje światowe, Siły Zbrojne i reakcje w złożonych sytuacjach.</p><button data-level="sztab">Rozpocznij</button></div>
+</div>
+<div class="cheatsheet">
+<div class="cheat"><b>Cel</b><span>Zdobądź minimum 70% punktów i zachowaj przynajmniej 1 punkt bezpieczeństwa.</span></div>
+<div class="cheat"><b>Zasada</b><span>Po błędzie zobaczysz krótkie wyjaśnienie. Zapamiętaj je — podobne sytuacje mogą wrócić.</span></div>
+</div>
+</section>
+
+<section class="panel screen" id="game" hidden>
+<span class="missiontag" id="tag">ALARM</span>
+<h2 class="question" id="question"></h2>
+<p class="context" id="context"></p>
+<div class="answers" id="answers"></div>
+<div id="feedback" hidden></div>
+<div class="nextrow"><button class="primary" id="next" hidden>Następna decyzja →</button></div>
+</section>
+
+<section class="panel screen result" id="result" hidden>
+<div class="big" id="finalScore">0%</div>
+<h2 id="resultTitle">Misja zakończona</h2>
+<p id="resultText"></p>
+<div class="result-actions"><button class="primary" id="again">Zagraj ponownie</button><button class="secondary" id="menu">Wybierz inny poziom</button></div>
+</section>
+</main>
+<footer>NaukoGramy · Centrum Kryzysowe · materiał do powtórki EDB</footer>
+
+<script>
+const BANK={
+rekrut:[
+{tag:"SŁUŻBY",q:"Co oznacza skrót PSP?",a:["Państwowa Straż Pożarna","Polska Służba Porządkowa","Państwowy System Pomocy","Powiatowa Straż Publiczna"],c:0,e:"PSP to Państwowa Straż Pożarna."},
+{tag:"SŁUŻBY",q:"Która formacja zajmuje się ratownictwem w górach poza Tatrami?",a:["WOPR","GOPR","SG","ABW"],c:1,e:"GOPR to Górskie Ochotnicze Pogotowie Ratunkowe."},
+{tag:"SŁUŻBY",q:"Która formacja prowadzi ratownictwo nad wodą?",a:["WOPR","TOPR","RCB","WOT"],c:0,e:"WOPR działa w ratownictwie wodnym."},
+{tag:"ALARM",q:"Jaki jest ogólny europejski numer alarmowy?",a:["911","112","998","999"],c:1,e:"112 to wspólny numer alarmowy działający w Polsce i całej UE."},
+{tag:"ZAGROŻENIA",q:"Powódź jest przede wszystkim zagrożeniem…",a:["naturalnym","militarnym","technicznym","cybernetycznym"],c:0,e:"Powódź jest przykładem zagrożenia naturalnego."},
+{tag:"ZAGROŻENIA",q:"Awaria zakładu chemicznego i wyciek substancji to zagrożenie…",a:["naturalne","techniczne","wyłącznie społeczne","meteorologiczne"],c:1,e:"Awarie przemysłowe zaliczamy do zagrożeń technicznych."},
+{tag:"ORGANIZACJE",q:"Co oznacza skrót WHO?",a:["Światowa Organizacja Zdrowia","Światowa Organizacja Humanitarna","Wspólnota Handlu Obronnego","Wojskowa Organizacja Humanitarna"],c:0,e:"WHO to World Health Organization, czyli Światowa Organizacja Zdrowia."},
+{tag:"ORGANIZACJE",q:"NATO jest przede wszystkim sojuszem…",a:["sportowym","wojskowym i obronnym","medycznym","handlowym"],c:1,e:"NATO jest sojuszem polityczno-wojskowym opartym na wspólnej obronie."},
+{tag:"SIŁY ZBROJNE",q:"Który z tych rodzajów jest częścią Sił Zbrojnych RP?",a:["Wojska Lądowe","Straż Miejska","Policja","Państwowa Straż Pożarna"],c:0,e:"Wojska Lądowe są jednym z rodzajów Sił Zbrojnych RP."},
+{tag:"SIŁY ZBROJNE",q:"Który rodzaj Sił Zbrojnych odpowiada za działania na morzu?",a:["Wojska Specjalne","Marynarka Wojenna","WOT","Siły Powietrzne"],c:1,e:"Za działania morskie odpowiada Marynarka Wojenna."}
+],
+dowodca:[
+{tag:"POŻAR",q:"W mieszkaniu pojawia się gęsty dym z kuchni. Co robisz najpierw?",ctx:"Nie wiesz, co dokładnie się pali.",a:["Wchodzę i otwieram piekarnik","Ostrzegam domowników, wychodzę w bezpieczne miejsce i alarmuję służby","Wylewam wodę na każde źródło ognia","Chowam się w łazience"],c:1,e:"Priorytetem jest bezpieczeństwo ludzi, ewakuacja i wezwanie pomocy. Woda nie nadaje się do każdego rodzaju pożaru."},
+{tag:"CHEMIA",q:"Cysterna ma wyciek nieznanej substancji. Jaka reakcja jest najbezpieczniejsza?",a:["Podejść, by przeczytać etykietę","Oddalić się, nie dotykać substancji i zadzwonić pod 112","Przykryć wyciek ubraniem","Sprawdzić zapach z bliska"],c:1,e:"Przy nieznanej substancji nie zbliżamy się i nie dotykamy jej. Informujemy służby."},
+{tag:"POWÓDŹ",q:"Władze zarządzają ewakuację z terenu zagrożonego powodzią. Co robisz?",a:["Czekam, aż woda wejdzie do domu","Stosuję się do komunikatów i opuszczam teren wyznaczoną drogą","Jadę nad rzekę zobaczyć poziom wody","Ignoruję polecenie, jeśli nie pada"],c:1,e:"Polecenia ewakuacji należy wykonywać możliwie szybko i zgodnie z instrukcjami służb."},
+{tag:"ZDROWIE",q:"Osoba jest nieprzytomna i nie reaguje. Jaki numer możesz wybrać, by wezwać pomoc medyczną?",a:["999 lub 112","986","991","995"],c:0,e:"999 łączy z Państwowym Ratownictwem Medycznym, a 112 jest ogólnym numerem alarmowym."},
+{tag:"CYBER",q:"Dostajesz wiadomość: „Twoje konto zostanie zablokowane — podaj hasło w formularzu”. Co robisz?",a:["Podaję hasło szybko","Nie klikam linku, sprawdzam nadawcę i zgłaszam próbę wyłudzenia","Odsyłam numer PESEL zamiast hasła","Przesyłam wiadomość znajomym"],c:1,e:"Podejrzane linki i żądania danych mogą być phishingiem. Nie podajemy danych logowania."},
+{tag:"RCB",q:"Otrzymujesz Alert RCB o bardzo silnym wietrze. Co ma największy sens?",a:["Ignorować, bo SMS nie jest poleceniem","Zabezpieczyć luźne przedmioty i śledzić komunikaty","Stanąć pod drzewem i obserwować pogodę","Jechać do lasu"],c:1,e:"Alert RCB służy ostrzeganiu. Należy ograniczyć ryzyko i śledzić aktualne komunikaty."},
+{tag:"GRANICA",q:"Która formacja odpowiada za ochronę granicy państwowej?",a:["Straż Graniczna","WOPR","TOPR","WHO"],c:0,e:"Ochrona granicy państwowej to jedno z głównych zadań Straży Granicznej."},
+{tag:"TATRY",q:"Turysta ulega wypadkowi wysoko w Tatrach. Która wyspecjalizowana służba kojarzy się z takim ratownictwem?",a:["TOPR","WOPR","ABW","RCB"],c:0,e:"TOPR prowadzi ratownictwo górskie na obszarze Tatr."},
+{tag:"EPIDEMIA",q:"Która organizacja międzynarodowa koordynuje działania dotyczące zdrowia publicznego na świecie?",a:["NATO","WHO","WTO","Interpol"],c:1,e:"WHO jest agendą ONZ wyspecjalizowaną w zdrowiu."},
+{tag:"WOJSKO",q:"Do pomocy lokalnym społecznościom podczas klęsk żywiołowych często kierowani są żołnierze…",a:["WOT","wyłącznie Marynarki Wojennej","wyłącznie Wojsk Specjalnych","Straży Granicznej"],c:0,e:"Wojska Obrony Terytorialnej mają m.in. zadania wsparcia społeczności i administracji w sytuacjach kryzysowych."}
+],
+sztab:[
+{tag:"ONZ",q:"Która organizacja została utworzona, by wspierać pokój i współpracę międzynarodową?",a:["ONZ","WOPR","ABW","WOT"],c:0,e:"ONZ to Organizacja Narodów Zjednoczonych."},
+{tag:"NATO",q:"Które zdanie najlepiej opisuje NATO?",a:["To światowa służba medyczna","To sojusz polityczno-wojskowy oparty na wspólnej obronie","To organ Unii Europejskiej do gaszenia pożarów","To polska formacja graniczna"],c:1,e:"NATO zrzesza państwa współpracujące w dziedzinie bezpieczeństwa i wspólnej obrony."},
+{tag:"UNICEF",q:"UNICEF kojarzymy przede wszystkim z…",a:["pomocą dzieciom","obroną powietrzną","ratownictwem morskim","ochroną granic"],c:0,e:"UNICEF działa na rzecz praw, zdrowia i bezpieczeństwa dzieci."},
+{tag:"SIŁY ZBROJNE",q:"Który zestaw zawiera wyłącznie rodzaje Sił Zbrojnych RP?",a:["Wojska Lądowe, Siły Powietrzne, Marynarka Wojenna, Wojska Specjalne, WOT","Policja, PSP, WOPR, WOT, SG","ABW, Policja, Marynarka Wojenna, RCB","PSP, Wojska Lądowe, TOPR, SG"],c:0,e:"Pięć rodzajów Sił Zbrojnych RP to Wojska Lądowe, Siły Powietrzne, Marynarka Wojenna, Wojska Specjalne i Wojska Obrony Terytorialnej."},
+{tag:"POWIETRZE",q:"Który rodzaj Sił Zbrojnych odpowiada m.in. za obronę polskiej przestrzeni powietrznej?",a:["Siły Powietrzne","Marynarka Wojenna","WOT","Policja"],c:0,e:"To zadanie Sił Powietrznych, wspieranych przez inne elementy systemu obrony."},
+{tag:"SPECJALNE",q:"Operacja wymagająca niewielkiego, wysoko wyszkolonego zespołu do zadania specjalnego najbardziej pasuje do…",a:["Wojsk Specjalnych","WOPR","PSP","RCB"],c:0,e:"Wojska Specjalne są przeznaczone do prowadzenia operacji specjalnych."},
+{tag:"CYBER",q:"Wojska Obrony Cyberprzestrzeni to…",a:["osobny szósty rodzaj Sił Zbrojnych RP","wyspecjalizowany komponent odpowiedzialny za działania w cyberprzestrzeni, ale nie jeden z pięciu rodzajów SZ RP","cywilna organizacja ONZ","część Policji"],c:1,e:"WOC odpowiadają za cyberprzestrzeń, ale nie są wymieniane jako osobny rodzaj Sił Zbrojnych obok pięciu podstawowych rodzajów."},
+{tag:"KRYZYS",q:"Duża powódź odcina kilka miejscowości. Który zestaw działań jest najbardziej rozsądny?",a:["Samodzielne wejście na zalany teren bez informacji","Koordynacja służb, ewakuacja zagrożonych, komunikaty i wsparcie ratownicze","Wyłączenie wszystkich komunikatów, by uniknąć paniki","Pozostawienie decyzji wyłącznie mieszkańcom"],c:1,e:"Sytuacja kryzysowa wymaga koordynacji, informacji, ratownictwa i wykonywania poleceń właściwych służb."},
+{tag:"SKAŻENIE",q:"Po komunikacie o skażeniu chemicznym służby nakazują pozostać w budynku. Co robisz?",a:["Otwieram wszystkie okna","Zamykam okna i drzwi, wyłączam wentylację jeśli zalecono i śledzę komunikaty","Wychodzę sprawdzić źródło skażenia","Idę pobiegać"],c:1,e:"Przy skażeniu należy ograniczyć napływ powietrza z zewnątrz i stosować się do komunikatów służb."},
+{tag:"DECYZJA",q:"Co jest najważniejszą zasadą podczas realnego zagrożenia?",a:["Nagranie zdarzenia telefonem","Nieutrudnianie działań służb i stosowanie się do oficjalnych komunikatów","Samodzielne wejście do strefy zagrożenia","Rozsyłanie niepotwierdzonych informacji"],c:1,e:"W kryzysie liczą się wiarygodne komunikaty, bezpieczeństwo i nieutrudnianie pracy służbom."}
+]};
+let level="",items=[],idx=0,score=0,lives=3,locked=false;
+const $=id=>document.getElementById(id);
+const screens=["start","game","result"];
+function show(id){screens.forEach(x=>$(x).hidden=x!==id)}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function refresh(){ $("score").textContent=score;$("lives").textContent=lives;$("step").textContent=items.length?Math.min(idx+1,items.length)+"/"+items.length:"0/0";$("bar").style.width=items.length?(idx/items.length*100)+"%":"0%"}
+function startGame(l){level=l;items=shuffle(BANK[l]);idx=0;score=0;lives=3;locked=false;show("game");render()}
+function render(){locked=false;refresh();const q=items[idx];$("tag").textContent=q.tag;$("question").textContent=q.q;$("context").textContent=q.ctx||"";$("answers").replaceChildren();$("feedback").hidden=true;$("next").hidden=true;
+q.a.forEach((txt,i)=>{const b=document.createElement("button");b.className="answer";b.textContent=txt;b.onclick=()=>choose(i,b);$("answers").append(b)})}
+function choose(i,button){if(locked)return;locked=true;const q=items[idx];const buttons=[...document.querySelectorAll(".answer")];buttons.forEach(b=>b.disabled=true);buttons[q.c].classList.add("correct");const ok=i===q.c;if(!ok){button.classList.add("wrong");lives=Math.max(0,lives-1)}else score+=10;
+const f=$("feedback");f.className="feedback "+(ok?"good":"bad");f.innerHTML=(ok?"Dobra decyzja.":"Nie tym razem.")+"<small>"+q.e+"</small>";f.hidden=false;$("next").hidden=false;refresh()}
+function next(){idx++;if(idx>=items.length||lives===0)return finish();render()}
+function finish(){const max=items.length*10,pct=Math.round(score/max*100);show("result");$("bar").style.width="100%";$("finalScore").textContent=pct+"%";let title=pct>=90?"Dowódca gotowy do akcji":pct>=70?"Misja zaliczona":pct>=50?"Blisko — powtórz misję":"Potrzebna powtórka";if(lives===0)title="Centrum utraciło bezpieczeństwo";$("resultTitle").textContent=title;$("resultText").textContent="Wynik: "+score+" / "+max+" pkt. Poziom bezpieczeństwa: "+lives+"/3.";let best=Number(localStorage.getItem("naukogramy.edb.best")||0);if(score>best){best=score;localStorage.setItem("naukogramy.edb.best",String(best))}$("best").textContent=best}
+document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>startGame(b.dataset.level));$("next").onclick=next;$("again").onclick=()=>startGame(level);$("menu").onclick=()=>{show("start");items=[];idx=0;score=0;lives=3;refresh()};
+$("best").textContent=localStorage.getItem("naukogramy.edb.best")||0;refresh();
+</script>
+</body>
+</html>
