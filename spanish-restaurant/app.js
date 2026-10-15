@@ -39,9 +39,9 @@ function bindChoices(){document.querySelectorAll('[data-choice]').forEach(b=>b.o
 function toggleFood(id){if(!session||session.answered||!session.options.includes(id))return;
  const source=document.querySelector(`[data-food="${id}"]`),box=source?.getBoundingClientRect?.();const origin=box?{x:box.left+box.width/2,y:box.top+box.height/2}:null;
  const at=session.selected.indexOf(id);let replaced=null;
- if(at<0){const slot=foodSlot(id);if(['main','starch','drink'].includes(slot)&&session.mode!=='stock'){replaced=session.selected.find(other=>foodSlot(other)===slot);session.selected=session.selected.filter(other=>foodSlot(other)!==slot);}if(session.mode==='stock')session.selected=[];session.selected.push(id);}else session.selected.splice(at,1);
+ if(at<0){const slot=foodSlot(id);if(slot==='drink'&&session.mode!=='stock'){replaced=session.selected.find(other=>foodSlot(other)===slot);session.selected=session.selected.filter(other=>foodSlot(other)!==slot);}if(session.mode==='stock')session.selected=[];session.selected.push(id);}else session.selected.splice(at,1);
  plate(id,origin);
- if(replaced)feedback('Zmieniono składnik. Reszta zestawu zostaje.','hint');
+ if(replaced)feedback('Zmieniono napój. Składniki na talerzu zostają.','hint');
 
 }
 function plate(changedId,origin){updatePlateVisual(changedId,origin);}
