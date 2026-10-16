@@ -12,6 +12,7 @@ for(const language of ['es','en','it'])for(const ui of ['pl','en','it']){T.I.set
  }}
 T.I.setPractice('es');T.I.setUI('pl');T.start('orders');let s=T.session;s.selected=[s.options.find(id=>!s.answer.includes(id))];T.check();assert(!s.answered);s.selected=[];s.answer.forEach(T.toggleFood);T.check();assert.equal(s.coins,5);T.check();assert.equal(s.coins,5,'No double score');
 T.start('stock');s=T.session;s.answer=['agua'];s.options=['agua','sushi'];s.selected=[];T.toggleFood('agua');assert(w.document.querySelector('#plated-foods [data-remove="agua"]'),'Drink vocabulary works in stock mode');T.check();assert.equal(s.correct,1);
+for(let i=0;i<240;i++){T.start('stock');s=T.session;assert(s.options.includes(s.answer[0]),'Target always present including drinks');s.answer.forEach(T.toggleFood);T.check();assert.equal(s.correct,1)}
 const drinks=new Set(),sizes=new Set();for(let i=0;i<160;i++){T.start('orders');s=T.session;drinks.add(s.answer.at(-1));sizes.add(s.answer.length-1)}assert.equal(drinks.size,6);assert.equal(sizes.size,4);
 for(const lang of ['en','it']){T.I.setPractice(lang);T.start('orders');s=T.session;const order=s.orderText;assert(!order.includes('Quiero'));assert(!w.document.getElementById('stage').innerHTML.includes('undefined'));}
 w.close();console.log('PASS: restaurant 72 language/mode combinations; 40 foods/58 guests; stock drinks; retry points; no double award; randomized order sizes and all 6 drinks');
