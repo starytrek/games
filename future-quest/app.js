@@ -12,7 +12,7 @@ function show(id){['home','game','result'].forEach(x=>$(x).hidden=x!==id)}
 function button(text,action){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=action;return b}
 function best(){const records=read(KEY,{}),p=$('person').value;const r=records[p]?.['all:'+ $('mode').value];$('record').textContent=r?`Rekord pełnej misji (${p}): ${r.percent}% · ${r.points} energii`:''}
 $('person').onchange=()=>{write('starytrek.person',$('person').value);best()};$('mode').onchange=best;best();
-function start(which,repeat){mission=String(which);mode=$('mode').value;person=$('person').value;queue=repeat||TASKS.filter(q=>which==='all'||q.level===Number(which));index=0;rows=[];points=0;streak=0;runId=Date.now()+'-'+Math.random().toString(36).slice(2);show('game');render()}
+function start(which,repeat){mission=String(which);mode=$('mode').value;person=$('person').value;queue=repeat?shuffle(repeat):which==='all'?[1,2,3].flatMap(level=>shuffle(TASKS.filter(q=>q.level===level))):shuffle(TASKS.filter(q=>q.level===Number(which)));index=0;rows=[];points=0;streak=0;runId=Date.now()+'-'+Math.random().toString(36).slice(2);show('game');render()}
 document.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>start(b.dataset.start));
 function status(){ $('counter').textContent=`Zadanie ${index+1} / ${queue.length}`;$('score').textContent=`⚡ ${points} · seria ${streak}`;$('bar').style.width=(index/queue.length*100)+'%'}
 function choose(value,b){if(checked)return;answer=value;document.querySelectorAll('.options button').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b))});$('check').disabled=false}

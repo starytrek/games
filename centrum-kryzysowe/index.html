@@ -99,19 +99,19 @@ sztab:[
 {tag:"SKAŻENIE",q:"Po komunikacie o skażeniu chemicznym służby nakazują pozostać w budynku. Co robisz?",a:["Otwieram wszystkie okna","Zamykam okna i drzwi, wyłączam wentylację jeśli zalecono i śledzę komunikaty","Wychodzę sprawdzić źródło skażenia","Idę pobiegać"],c:1,e:"Przy skażeniu należy ograniczyć napływ powietrza z zewnątrz i stosować się do komunikatów służb."},
 {tag:"DECYZJA",q:"Co jest najważniejszą zasadą podczas realnego zagrożenia?",a:["Nagranie zdarzenia telefonem","Nieutrudnianie działań służb i stosowanie się do oficjalnych komunikatów","Samodzielne wejście do strefy zagrożenia","Rozsyłanie niepotwierdzonych informacji"],c:1,e:"W kryzysie liczą się wiarygodne komunikaty, bezpieczeństwo i nieutrudnianie pracy służbom."}
 ]};
-let level="",items=[],idx=0,score=0,lives=3,locked=false;
+let level="",items=[],idx=0,score=0,lives=3,locked=false,missed=[];
 const $=id=>document.getElementById(id);
 const screens=["start","game","result"];
 function show(id){screens.forEach(x=>$(x).hidden=x!==id)}
-function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function refresh(){ $("score").textContent=score;$("lives").textContent=lives;$("step").textContent=items.length?Math.min(idx+1,items.length)+"/"+items.length:"0/0";$("bar").style.width=items.length?(idx/items.length*100)+"%":"0%"}
-function startGame(l){level=l;items=shuffle(BANK[l]);idx=0;score=0;lives=3;locked=false;show("game");render()}
+function startGame(l,retry){level=l;items=shuffle(retry||BANK[l]);missed=[];idx=0;score=0;lives=3;locked=false;show("game");render()}
 function render(){locked=false;refresh();const q=items[idx];$("tag").textContent=q.tag;$("question").textContent=q.q;$("context").textContent=q.ctx||"";$("answers").replaceChildren();$("feedback").hidden=true;$("next").hidden=true;
-q.a.forEach((txt,i)=>{const b=document.createElement("button");b.className="answer";b.textContent=txt;b.onclick=()=>choose(i,b);$("answers").append(b)})}
-function choose(i,button){if(locked)return;locked=true;const q=items[idx];const buttons=[...document.querySelectorAll(".answer")];buttons.forEach(b=>b.disabled=true);buttons[q.c].classList.add("correct");const ok=i===q.c;if(!ok){button.classList.add("wrong");lives=Math.max(0,lives-1)}else score+=10;
+shuffle(q.a.map((_,i)=>i)).forEach(i=>{const txt=q.a[i];const b=document.createElement("button");b.className="answer";b.dataset.option=i;b.textContent=txt;b.onclick=()=>choose(i,b);$("answers").append(b)})}
+function choose(i,button){if(locked)return;locked=true;const q=items[idx];const buttons=[...document.querySelectorAll(".answer")];buttons.forEach(b=>b.disabled=true);buttons.find(b=>Number(b.dataset.option)===q.c).classList.add("correct");const ok=i===q.c;if(!ok){missed.push(q);button.classList.add("wrong");lives=Math.max(0,lives-1)}else score+=10;
 const f=$("feedback");f.className="feedback "+(ok?"good":"bad");f.innerHTML=(ok?"Dobra decyzja.":"Nie tym razem.")+"<small>"+q.e+"</small>";f.hidden=false;$("next").hidden=false;refresh()}
 function next(){idx++;if(idx>=items.length||lives===0)return finish();render()}
-function finish(){const max=items.length*10,pct=Math.round(score/max*100);show("result");$("bar").style.width="100%";$("finalScore").textContent=pct+"%";let title=pct>=90?"Dowódca gotowy do akcji":pct>=70?"Misja zaliczona":pct>=50?"Blisko — powtórz misję":"Potrzebna powtórka";if(lives===0)title="Centrum utraciło bezpieczeństwo";$("resultTitle").textContent=title;$("resultText").textContent="Wynik: "+score+" / "+max+" pkt. Poziom bezpieczeństwa: "+lives+"/3.";let best=Number(localStorage.getItem("naukogramy.edb.best")||0);if(score>best){best=score;localStorage.setItem("naukogramy.edb.best",String(best))}$("best").textContent=best}
+function finish(){const max=items.length*10,pct=Math.round(score/max*100);show("result");$("bar").style.width="100%";$("finalScore").textContent=pct+"%";let title=pct>=90?"Dowódca gotowy do akcji":pct>=70?"Misja zaliczona":pct>=50?"Blisko — powtórz misję":"Potrzebna powtórka";if(lives===0)title="Centrum utraciło bezpieczeństwo";$("resultTitle").textContent=title;$("resultText").textContent="Wynik: "+score+" / "+max+" pkt. Poziom bezpieczeństwa: "+lives+"/3.";let best=Number(localStorage.getItem("naukogramy.edb.best")||0);if(score>best){best=score;localStorage.setItem("naukogramy.edb.best",String(best))}$("best").textContent=best;let retry=$("retry-errors");if(!retry){retry=document.createElement('button');retry.id='retry-errors';$('result').append(retry)}retry.hidden=!missed.length;retry.textContent='Powtórz błędne decyzje ('+missed.length+')';const errors=[...missed];retry.onclick=()=>startGame(level,errors)}
 document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>startGame(b.dataset.level));$("next").onclick=next;$("again").onclick=()=>startGame(level);$("menu").onclick=()=>{show("start");items=[];idx=0;score=0;lives=3;refresh()};
 $("best").textContent=localStorage.getItem("naukogramy.edb.best")||0;refresh();
 </script>
