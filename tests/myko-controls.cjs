@@ -4,7 +4,7 @@ const dom=new JSDOM('<aside><div id="host"></div></aside>',{url:'https://starytr
 let callbacks=new Map(),next=0,now=1000,saved,wins=0;
 w.requestAnimationFrame=fn=>{callbacks.set(++next,fn);return next};w.cancelAnimationFrame=id=>callbacks.delete(id);w.matchMedia=()=>({matches:false});
 Object.defineProperty(w.HTMLElement.prototype,'offsetParent',{get(){return this.parentElement}});
-w.HTMLElement.prototype.setPointerCapture=function(){};
+w.HTMLElement.prototype.setPointerCapture=function(){};w.HTMLElement.prototype.getClientRects=function(){return [this.getBoundingClientRect()]};
 w.HTMLElement.prototype.getBoundingClientRect=function(){return {x:0,y:0,left:0,top:0,width:this.classList.contains('maze-joystick')?112:390,height:this.classList.contains('maze-joystick')?112:580,right:390,bottom:580}};
 const grad={addColorStop(){}};const ctx=new Proxy({createRadialGradient:()=>grad},{get:(o,k)=>o[k]||(()=>{})});w.HTMLCanvasElement.prototype.getContext=()=>ctx;
 w.eval(fs.readFileSync('akademia-zarodnikow/maze.js','utf8'));const M=w.MykoMaze,host=w.document.getElementById('host');
