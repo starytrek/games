@@ -1,12 +1,12 @@
 'use strict';
-const DRINK_FOODS=['leche','agua','te','cafe','zumo','limonada','latte'];
-const MAIN_FOODS=['carne','pescado','huevo','jamon','sushi','pizza','burger','pollo'];
+const DRINK_FOODS=['leche','agua','te','cafe','zumo','limonada','latte','cola'];
+const MAIN_FOODS=['carne','pescado','huevo','jamon','sushi','pizza','burger','pollo','cutlet'];
 const STARCH_FOODS=['patata','arroz','pasta','pan','fries'];
 const VEG_FOODS=['lechuga','tomate','pepino','brocoli','pimiento','cebolla','aceitunas','legumbres'];
 function foodSlot(id){if(id==='ketchup')return 'sauce';if(id==='helado')return 'dessert';return DRINK_FOODS.includes(id)?'drink':MAIN_FOODS.includes(id)?'main':STARCH_FOODS.includes(id)?'starch':VEG_FOODS.includes(id)?'greens':'extra';}
 function foodPicture(id){
- const sprites=['aceite','pepino','platano','manzana','yogur','pan','jamon','galleta','naranja','pescado','leche','carne','huevo','lechuga','tomate','queso','arroz','fresa','mantequilla','patata','pasta','pimiento','cebolla','aceitunas','uvas','brocoli','legumbres','agua','te','cafe','zumo','limonada','latte','fries','ketchup','sushi','pizza','burger','pollo','helado'];
- const n=sprites.indexOf(id);if(n>=0)return `<span class="food-photo" aria-hidden="true" style="background-position:${(n%8)*100/7}% ${Math.floor(n/8)*25}%"></span>`;
+ const sprites=['aceite','pepino','platano','manzana','yogur','pan','jamon','galleta','naranja','pescado','leche','carne','huevo','lechuga','tomate','queso','arroz','fresa','mantequilla','patata','pasta','pimiento','cebolla','aceitunas','uvas','brocoli','legumbres','agua','te','cafe','zumo','limonada','latte','fries','ketchup','sushi','pizza','burger','pollo','helado','cola','cutlet'];
+ const n=sprites.indexOf(id);if(n>=0)return `<span class="food-photo" aria-hidden="true" style="background-position:${(n%8)*100/7}% ${Math.floor(n/8)*20}%"></span>`;
 
  const wrap=body=>`<svg viewBox="0 0 180 150" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
  const ellipse=(x,y,rx,ry,color,angle=0)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${color}" transform="rotate(${angle} ${x} ${y})"/>`;
