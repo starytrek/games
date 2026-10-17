@@ -70,5 +70,3 @@ p{max-width:65ch}.hero p,.level p,.notebook p,.word,.choice small,.helper,.guest
  .result-save>div{flex-wrap:wrap}
  .result-save button{width:100%}
 }
-
-.level-note{flex-basis:100%;margin:0;color:#cde5df;font-size:14px}.level-note:empty{display:none}
