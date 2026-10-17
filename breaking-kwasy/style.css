@@ -41,3 +41,57 @@
 #game.ink-area{padding:8px 8px 0}.dialogue{padding:9px;margin-bottom:7px}.dialogue p{font-size:14px;line-height:1.3;margin:5px 0}.dialogue h2{font-size:21px;margin-top:6px}
 .mission-meta{margin-bottom:6px}.task-footer{padding-top:6px}.scene-label{font-size:11px;top:5px}.chapter-dots{top:10px}.task-content{padding-bottom:8px}
 }
+
+/* One screen: reserve controls first, then fit the complete task above them. */
+html,body{height:100%;overflow:hidden}
+.comic,.comic:fullscreen{height:100dvh;padding-bottom:max(4px,env(safe-area-inset-bottom));min-height:0}
+.ink-area,#result.ink-area{height:100%;min-height:0;overflow:hidden}
+#game.ink-area{height:100%;min-height:0}
+.task-content{flex:1;min-height:0;overflow:hidden;padding:4px 4px 8px}
+.fit-content{display:flow-root;zoom:1}
+.task-footer{position:relative}
+@media(max-width:760px),(max-height:500px){
+ .comic{grid-template-rows:44px clamp(76px,15dvh,132px) minmax(0,1fr);gap:4px}
+ .story-panel{grid-template-rows:minmax(0,1fr) auto}
+ .story-panel .speech{font-size:12px;line-height:1.2;padding:4px 7px;max-height:none;overflow:visible}
+ .work-panel{padding:29px 4px 3px}
+ .scene-label{max-width:calc(100% - 105px);font-size:10px;padding:4px 6px}
+ .chapter-dots{gap:4px;right:8px}
+ #game.ink-area{padding:6px 6px 0}
+ .mission-meta{font-size:11px;gap:4px;margin-bottom:4px;line-height:1.2}
+ .dialogue{padding:7px 9px;margin-bottom:6px;box-shadow:2px 2px 0 #050e0b}
+ .speaker{font-size:10px;padding:2px 5px}
+ .dialogue p{font-size:13px;line-height:1.25;margin:4px 0}
+ .dialogue h2{font-size:20px;margin-top:5px}
+ .interaction{margin:6px 0 0}
+ .builder{grid-template-columns:minmax(0,1fr);gap:5px;padding:0}
+ .formula-slot{grid-column:1/-1;min-height:34px;font-size:26px;padding:3px;margin:0}
+ .formula-slot small{font-size:18px}
+ .token-row{margin:0;gap:5px}
+ .row-name{font-size:11px;line-height:1.2;margin:0}
+ .token{font-size:22px;padding:6px 12px;min-height:40px}
+ .choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .choice{font-size:15px;line-height:1.25;padding:8px;min-height:44px}
+ .bottle svg{height:80px}
+ .bottle span{font-size:12px}
+ .feedback,.hint-line{font-size:13px;line-height:1.25;padding:6px 8px;margin:6px 0 0}
+ .feedback strong{margin-bottom:2px}
+ .task-footer{padding:5px 2px 3px}
+ .game-actions{min-height:42px;gap:6px}
+ .game-actions .text-button,.game-actions .comic-button{min-height:42px;font-size:15px;padding:8px 10px}
+ .progress-track{margin-top:6px}
+ .pause-link{font-size:12px;min-height:26px;margin:0;padding:4px 0}
+ .hud{min-width:0}.hud button.hud-title{font-size:13px;letter-spacing:0;gap:2px}
+ .hud a{font-size:11px}.hud-logo{width:24px}.hud button{font-size:12px;padding:5px 3px}
+}
+@media(max-height:500px){
+ .comic{grid-template-columns:minmax(0,1fr);grid-template-rows:40px minmax(0,1fr);gap:3px}
+ .story-strip{display:none}.work-panel{grid-column:1;grid-row:2;padding:27px 5px 3px}
+ .dialogue p{margin:3px 0}.dialogue{padding:6px 8px;margin-bottom:4px}
+ .dialogue h2{font-size:19px;margin-top:3px}
+ .builder{grid-template-columns:1fr 1fr}.formula-slot{grid-column:1/-1}
+ .bottle svg{height:64px}
+}
+
+/* Chapter transitions stay inside the screen as well. */
+@keyframes page-turn{from{opacity:.4}to{opacity:1}}

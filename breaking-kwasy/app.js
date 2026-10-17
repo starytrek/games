@@ -26,7 +26,7 @@ function reaction(good){const e=document.createElement('div');e.className='react
 function tone(good){if(!sound)return;try{audio??=new (window.AudioContext||window.webkitAudioContext)();audio.resume();const t=audio.currentTime;[good?440:140,good?660:110].forEach((hz,i)=>{const o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.value=hz;g.gain.setValueAtTime(.09,t+i*.11);g.gain.exponentialRampToValueAtTime(.001,t+i*.11+.18);o.connect(g).connect(audio.destination);o.start(t+i*.11);o.stop(t+i*.11+.19)})}catch{}}
 function answer(good,label,index){const q=current(),d=draft();if(d.solved)return;d.attempts++;window.StudyActivity?.record(person,'bread:'+run.id+':'+q.id);if(!good){if(index!==undefined&&!d.wrongOptions.includes(index))d.wrongOptions.push(index);if(!run.wrong.includes(q.id))run.wrong.push(q.id);profile().facts[q.id]={...(profile().facts[q.id]||{}),weak:true,streak:0};feedback(false,q);renderInteraction();reaction(false);tone(false);persist();return}d.solved=true;const first=d.attempts===1,clean=first&&!d.hint;const points=clean?100:first?70:25;run.points+=points;if(first)run.firstCorrect++;if(d.hint&&!run.hinted.includes(q.id))run.hinted.push(q.id);run.rows.push({id:q.id,first,clean,points,label,attempts:d.attempts});const old=profile().facts[q.id]||{};profile().facts[q.id]={streak:clean?(old.streak||0)+1:0,weak:!clean,last:new Date().toISOString(),tries:(old.tries||0)+d.attempts};persist();feedback(true,q);renderInteraction();$('score-counter').textContent='◆ '+run.points;$('next').hidden=false;$('check').hidden=true;$('hint').hidden=true;reaction(true);tone(true)}
 function finish(){const p=profile();if(!p.runs.some(r=>r.id===run.id)){p.runs.push({id:run.id,at:new Date().toISOString(),scope:run.scope,total:run.ids.length,firstCorrect:run.firstCorrect,points:run.points,wrong:run.wrong,hinted:run.hinted,rows:run.rows});p.runs=p.runs.slice(-30)}p.active=null;persist();scene(5);show('result');const pct=Math.round(run.firstCorrect/run.ids.length*100),repeat=[...new Set([...run.wrong,...run.hinted])],topics=[...new Set(repeat.map(id=>QUESTIONS.find(q=>q.id===id).tag))];$('scene-label').textContent='ODCINEK ZAKOŃCZONY / '+person;$('result').innerHTML='<p class="overline">'+esc(person)+' / '+(run.review?'POWTÓRKA':'FINAŁ ODCINKA')+'</p><h2>'+(pct>=90?'CHEMIA OGARNIĘTA.':pct>=60?'JEST BAZA. JEDZIEMY DALEJ.':'WIEMY, CO POPRAWIĆ.')+'</h2><div class="result-stats"><div><strong>'+run.firstCorrect+'/'+run.ids.length+'</strong><span>za pierwszym razem</span></div><div><strong>'+run.points+'</strong><span>z '+run.ids.length*100+' kryształów</span></div><div><strong>'+pct+'%</strong><span>pierwszych trafień</span></div></div><p>'+(repeat.length?'Zostało '+repeat.length+' zadań do powtórki. Wracają te z błędem lub podpowiedzią.':'Wszystkie zadania rozwiązane bez błędów i podpowiedzi.')+'</p>'+(topics.length?'<ul class="result-traps">'+topics.map(t=>'<li>'+esc(t)+'</li>').join(''):'')+'<div class="result-controls">'+(repeat.length?'<button class="comic-button yellow" id="retry">POWTÓRZ TE '+repeat.length+' →</button>':'<button class="comic-button yellow" id="again">NOWY ODCINEK →</button>')+'<button class="comic-button" id="home">DO BAZY</button></div><p class="save-line">'+(storageOK?'Wynik zapisany dla '+esc(person)+' w tej przeglądarce.':'Zapis jest niedostępny. Nie zamykaj tej karty, jeśli chcesz powtórzyć błędy.')+'</p><p class="history-line">Ostatnie odcinki: '+p.runs.slice(-3).reverse().map(r=>r.firstCorrect+'/'+r.total+' · '+r.points+' ◆').join(' / ')+'</p>';$('retry')&&($('retry').onclick=()=>start(repeat));$('again')&&($('again').onclick=()=>start());$('home').onclick=lobby;}
-$('start').onclick=()=>start();$('weak-start').onclick=()=>start(pool().filter(q=>profile().facts[q.id]?.weak).map(q=>q.id));$('resume').onclick=()=>{run=profile().active;scope=run.scope;chapter=-1;show('game');round()};$('next').onclick=()=>{if(!draft().solved)return;run.index++;run.draft=null;persist();round()};$('check').onclick=()=>{const d=draft(),q=current();if(!d.h||!d.residue)return;answer(d.h===q.h&&d.residue===q.residue,['','H','H₂','H₃'][d.h]+d.residue)};$('hint').onclick=()=>{const d=draft();if(d.hint||d.solved)return;d.hint=true;persist();$('hint-copy').hidden=false;$('hint-copy').textContent=current().hint;$('hint').disabled=true;$('hint-copy').scrollIntoView({block:'nearest',behavior:'smooth'})};$('pause').onclick=()=>{persist();lobby()};document.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{scope=b.dataset.scope;lobby()});
+$('start').onclick=()=>start();$('weak-start').onclick=()=>start(pool().filter(q=>profile().facts[q.id]?.weak).map(q=>q.id));$('resume').onclick=()=>{run=profile().active;scope=run.scope;chapter=-1;show('game');round()};$('next').onclick=()=>{if(!draft().solved)return;run.index++;run.draft=null;persist();round()};$('check').onclick=()=>{const d=draft(),q=current();if(!d.h||!d.residue)return;answer(d.h===q.h&&d.residue===q.residue,['','H','H₂','H₃'][d.h]+d.residue)};$('hint').onclick=()=>{const d=draft();if(d.hint||d.solved)return;d.hint=true;persist();$('hint-copy').hidden=false;$('hint-copy').textContent=current().hint;$('hint').disabled=true};$('pause').onclick=()=>{persist();lobby()};document.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{scope=b.dataset.scope;lobby()});
 $('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'♫ ON':'♫ OFF';$('sound').setAttribute('aria-pressed',String(sound));$('sound').setAttribute('aria-label',sound?'Wyłącz dźwięki gry':'Włącz dźwięki gry');if(sound)tone(true)};$('fullscreen').onclick=()=>{if(!document.fullscreenElement)$('comic').requestFullscreen?.().catch(()=>{});else document.exitFullscreen?.().catch(()=>{})};
 $('acid-table').innerHTML='<div class="table-wrap"><table><thead><tr><th>Kwas</th><th>Wzór</th><th>Reszta</th><th>Wartościowość</th></tr></thead><tbody>'+ACIDS.map(a=>'<tr><td>'+esc(a.name)+'</td><td>'+a.formula+'</td><td>'+a.residue+'</td><td>'+a.valence+'</td></tr>').join('')+'</tbody></table></div>';$('notebook-button').onclick=()=>{if(run&&!draft().solved){draft().hint=true;persist();$('hint-copy').hidden=false;$('hint-copy').textContent='Skorzystano z zeszytu. To zadanie dostanie punkty jak za podpowiedź.';$('hint').disabled=true}$('notebook').showModal()};
 $('brand-home').onclick=()=>{if(run||profile().active){$('brand-dialog').showModal()}else{lobby();$('start').focus()}};
@@ -34,3 +34,34 @@ $('brand-continue').onclick=()=>{$('brand-dialog').close()};
 $('brand-menu').onclick=()=>{persist();$('brand-dialog').close();lobby();$('resume').hidden?$('start').focus():$('resume').focus()};
 $('brand-restart').onclick=()=>{const active=run||profile().active;if(active)scope=active.scope;$('brand-dialog').close();start()};
 window.addEventListener('pagehide',persist);lobby();
+
+// Fit all visible content, including hints and feedback, without an inner scroll area.
+// Compact CSS handles normal screens; zoom is a fallback for short viewports/long text.
+let fitFrame=0;
+function scheduleFit(){if(!fitFrame)fitFrame=requestAnimationFrame(fitScreen)}
+function fitScreen(){
+ fitFrame=0;
+ const hosts=$('comic').dataset.view==='game'?[document.querySelector('.task-content')]:[$($('comic').dataset.view)];
+ for(const host of hosts){
+  if(!host||host.hidden||!host.clientHeight)continue;
+  let content=host.querySelector(':scope > .fit-content');
+  if(!content){content=document.createElement('div');content.className='fit-content';content.append(...host.childNodes);host.append(content)}
+  const css=getComputedStyle(host),height=host.clientHeight-parseFloat(css.paddingTop)-parseFloat(css.paddingBottom)-6;
+  const width=host.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight);
+  const fits=()=>content.getBoundingClientRect().height<=height&&content.scrollWidth*Number(content.style.zoom||1)<=width+1;
+  content.style.zoom=1;
+  if(!fits()){
+   let low=.1,high=1;
+   for(let i=0;i<12;i++){const mid=(low+high)/2;content.style.zoom=mid;if(fits())low=mid;else high=mid}
+   content.style.zoom=low;
+  }
+  host.scrollTop=0;
+ }
+}
+new MutationObserver(scheduleFit).observe($('comic'),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+const screenObserver=new ResizeObserver(scheduleFit);
+[$('comic'),$('game'),$('lobby'),$('result'),document.querySelector('.task-content')].forEach(el=>screenObserver.observe(el));
+window.addEventListener('resize',scheduleFit);
+window.visualViewport?.addEventListener('resize',scheduleFit);
+document.fonts?.ready.then(scheduleFit);
+scheduleFit();
