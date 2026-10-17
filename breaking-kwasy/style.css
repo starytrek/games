@@ -95,3 +95,22 @@ html,body{height:100%;overflow:hidden}
 
 /* Chapter transitions stay inside the screen as well. */
 @keyframes page-turn{from{opacity:.4}to{opacity:1}}
+
+/* Three readable comic panels: artwork first, only a tiny caption. */
+@media(max-width:760px) and (min-height:501px){
+ .comic{grid-template-rows:44px clamp(100px,19dvh,170px) minmax(0,1fr)}
+ .story-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(0,1fr);gap:5px;padding:3px;overflow:hidden}
+ .comic[data-view] .story-strip .story-panel{display:block!important;min-width:0;height:100%;container-type:size;border-width:2px;box-shadow:none}
+ .story-panel .art-image{position:absolute;inset:0;width:100%;height:100%;z-index:0;background-size:calc(3 * max(100cqw,100cqh)) calc(2 * max(100cqw,100cqh));background-position:calc((100cqw - max(100cqw,100cqh)) / 2 - var(--tile-x) * max(100cqw,100cqh)) calc((100cqh - max(100cqw,100cqh)) / 2 - var(--tile-y) * max(100cqw,100cqh))}
+ .story-panel .speech{display:none}
+ .story-panel .caption{top:auto;bottom:0;left:0;max-width:none;width:100%;padding:3px 2px;font-size:9px;line-height:1.1;letter-spacing:0;transform:none;border:0;box-shadow:none;text-align:center;background:#fff4cde8}
+ #mission-story{display:none}
+}
+@media(max-height:500px){
+ .comic{grid-template-columns:minmax(170px,27%) minmax(0,1fr);grid-template-rows:40px minmax(0,1fr)}
+ .story-strip{display:grid;grid-column:1;grid-row:2;grid-template-columns:1fr;grid-template-rows:repeat(3,minmax(0,1fr));gap:4px;padding:3px}
+ .comic[data-view] .story-strip .story-panel{display:block!important;min-height:0;height:100%;container-type:size;border-width:2px}
+ .story-panel .art-image{position:absolute;inset:0;width:100%;height:100%;z-index:0;background-size:calc(3 * max(100cqw,100cqh)) calc(2 * max(100cqw,100cqh));background-position:calc((100cqw - max(100cqw,100cqh)) / 2 - var(--tile-x) * max(100cqw,100cqh)) calc((100cqh - max(100cqw,100cqh)) / 2 - var(--tile-y) * max(100cqw,100cqh))}
+ .story-panel .speech{display:none}.story-panel .caption{font-size:9px;padding:2px;top:2px;left:2px;transform:none;box-shadow:none}
+ .work-panel{grid-column:2}#mission-story{display:none}
+}
