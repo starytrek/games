@@ -13,7 +13,7 @@ const DIALOGS=[
 {q:'Powiedz: Jem chleb codziennie.',a:['Como pan','todos los días.'],d:['a veces.','muy a menudo.'],why:'Todos los días = codziennie; a veces = czasami; muy a menudo = bardzo często.'},
 {q:'Powiedz: Jem rybę czasami.',a:['Como pescado','a veces.'],d:['todos los días.','a menudo.'],why:'A veces = czasami. Como to „jem”, pierwsza osoba czasownika comer.'},
 {q:'Powiedz: Jem warzywa bardzo często.',a:['Como verduras','muy a menudo.'],d:['a veces.','todos los días.'],why:'Muy a menudo = bardzo często; a menudo = często.'},
-{q:'Powiedz: Interesuje mnie blog o modzie.',a:['Me interesa','el blog','de moda.'],d:['Me interesan','de bicicletas.'],why:'El blog jest w liczbie pojedynczej → me interesa.'},
+{q:'Poproś o rachunek.',a:['La cuenta,','por favor.'],d:['Las cuentas,','por favores.'],why:'La cuenta, por favor = Poproszę rachunek.'},
 {q:'Powiedz: Chcę mięso z makaronem i warzywami.',a:['Quiero','carne con pasta','y verduras.'],d:['Quieres','con pescado.'],why:'Quiero = chcę; con = z; y = i.'}
 ];
 const DISHES=[
