@@ -70,3 +70,78 @@ p{max-width:65ch}.hero p,.level p,.notebook p,.word,.choice small,.helper,.guest
  .result-save>div{flex-wrap:wrap}
  .result-save button{width:100%}
 }
+
+/* The active game uses the available viewport, including mobile browser bars. */
+body.playing{height:100vh;height:100dvh;min-height:0;overflow:hidden}
+.playing main{height:100%;max-width:1240px;margin:auto;padding:6px;min-height:0}
+.playing .hero,.playing footer{display:none}
+.playing #game{height:100%;min-height:0;display:grid;grid-template-rows:auto 3px minmax(0,1fr) auto auto;gap:6px}
+.playing .game-bar{display:grid;grid-template-columns:auto minmax(100px,1fr) auto;gap:6px;align-items:center;min-width:0}
+.playing #back{min-height:44px;padding:6px 10px;font-size:14px}
+.playing #score{grid-column:auto;font-size:11px;line-height:1.2;white-space:nowrap;text-align:right}
+.playing .game-bar .header-controls{width:100%;max-width:180px;justify-self:end;min-width:0;margin:0}
+.playing .game-bar .music-player{width:100%;grid-template-columns:24px minmax(0,1fr) 24px;height:44px}
+.playing .game-bar .music-player button{height:44px;min-height:44px;padding:3px}
+.playing .game-bar .music-player #music{width:auto;min-width:0;font-size:12px}
+.playing .game-bar .music-player #music-status{max-width:280px;width:220px}
+.playing .meter{margin:0;height:3px}
+.playing #stage{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px}
+.playing .guest-scene{min-width:0;grid-template-columns:62px minmax(0,1fr);gap:8px;padding:6px;margin:0;align-items:center}
+.playing .guest-seat{padding:0;min-width:0}
+.playing .guest-portrait{width:52px;height:52px}
+.playing .guest-name{font-size:11px;line-height:1.1;margin:2px 0 0;padding:0;display:block}
+.playing .venue-sign,.playing .venue-light,.playing .bar-drinks,.playing .restaurant-counter,.playing .bubble small{display:none}
+.playing .guest-scene .customer{padding:8px;min-width:0}
+.playing .guest-scene .bubble h2{font-size:clamp(14px,2.4dvh,19px);line-height:1.25;margin:0;overflow-wrap:normal}
+.playing .kitchen{min-height:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto}
+.playing .serving-area{min-height:0;padding:4px;container-type:size;justify-content:center}
+.playing .meal-setting{height:100%;width:100%;max-width:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.playing .meal-setting .ceramic-plate{width:min(64vw,100cqh,calc(100cqw - 66px),340px);height:auto;max-width:none;aspect-ratio:1;margin:0;flex:none}
+.playing .served-drinks{width:min(16vw,30cqh,54px);height:min(27vw,50cqh,90px);aspect-ratio:auto;min-width:0;flex:none}
+.playing .pantry{padding:6px;border-top:1px solid #5e4864;border-left:0;min-width:0}
+.playing .pantry-title{font-size:12px;line-height:1.2;margin:0 0 4px}
+.playing .pantry-title>span{display:none}
+.playing .kitchen .shelf{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.playing .kitchen .ingredient,.playing .kitchen .ingredient.selected{height:clamp(52px,10dvh,72px);min-height:0;padding:3px;gap:0}
+.playing .food-picture,.playing .kitchen .drink-option .food-picture{width:clamp(34px,7dvh,50px);height:clamp(34px,7dvh,50px)}
+.playing .product-number{font-size:11px;line-height:1.1}
+.playing #feedback:empty{display:none}
+.playing #feedback:not(:empty){font-size:12px;line-height:1.25;padding:6px 8px;margin:0;min-height:0}
+.playing .actions{display:grid;grid-template-columns:44px 44px minmax(0,1fr);gap:6px;margin:0;min-width:0}
+.playing .actions button{min-height:44px;padding:7px;font-size:14px;min-width:0}
+.playing .actions .primary{grid-column:auto}
+.playing #listen,.playing #hint{font-size:0}
+.playing #listen:before{content:'🔊';font-size:20px}
+.playing #hint:before{content:'💡';font-size:20px}
+.playing .choice-grid{min-height:0;grid-template-rows:repeat(2,minmax(0,1fr));gap:6px}
+.playing .choice{min-height:0;padding:6px;font-size:14px;text-align:center}
+.playing .choice small{font-size:12px;line-height:1.2;margin-top:4px}
+.playing .dish-picture{width:clamp(40px,11dvh,82px);height:clamp(40px,11dvh,82px);margin:0 auto 4px}
+.playing[data-mode="dialog"] #stage{grid-template-rows:auto auto minmax(0,1fr)}
+.playing .assembled{min-height:44px;margin:0;padding:6px;font-size:14px}
+.playing .tiles{align-content:start;align-items:start;gap:6px}
+.playing .tile{min-height:40px;padding:6px 9px;font-size:14px;max-width:100%}
+@media(min-width:850px){
+ .playing .guest-scene{grid-template-columns:88px minmax(0,1fr)}
+ .playing .guest-portrait{width:76px;height:76px}
+ .playing .guest-scene .bubble h2{font-size:22px}
+ .playing .kitchen{grid-template-columns:minmax(0,1fr) minmax(340px,1fr);grid-template-rows:minmax(0,1fr)}
+ .playing .pantry{border-top:0;border-left:1px solid #5e4864;display:grid;align-content:center;padding:12px}
+ .playing .pantry-title{font-size:14px;margin-bottom:8px}
+ .playing .actions{grid-template-columns:44px 44px minmax(0,1fr);max-width:650px;width:100%;justify-self:end}
+}
+@media(max-height:500px) and (min-width:600px){
+ .playing #stage{grid-template-columns:minmax(200px,.85fr) minmax(0,1.5fr);grid-template-rows:minmax(0,1fr)}
+ .playing .guest-scene{display:flex;flex-direction:column;justify-content:center}
+ .playing .guest-scene .bubble h2{font-size:15px}
+ .playing .guest-seat{display:flex;align-items:center;gap:8px}
+ .playing .guest-name{max-width:80px}
+ .playing .kitchen{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-rows:minmax(0,1fr)}
+ .playing .pantry{border-top:0;border-left:1px solid #5e4864;display:grid;align-content:center}
+ .playing .kitchen .shelf{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .playing .kitchen .ingredient,.playing .kitchen .ingredient.selected{height:58px}
+ .playing .food-picture,.playing .kitchen .drink-option .food-picture{width:38px;height:38px}
+ .playing[data-mode="dialog"] #stage{grid-template-columns:minmax(200px,.85fr) minmax(0,1.5fr);grid-template-rows:auto minmax(0,1fr)}
+ .playing[data-mode="dialog"] .guest-scene{grid-row:1/3}
+ .playing[data-mode="dialog"] .assembled,.playing[data-mode="dialog"] .tiles{grid-column:2}
+}
