@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UNIT 4 QUEST · Focus 3 · NaukoGramy</title>
+<meta name="description" content="116 interaktywnych zadań z Unit 4 Focus 3: słownictwo, czasy przyszłe, zdrowa dieta, czytanie, question tags, e-mail i restauracja.">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="../future-quest/">← Future Quest</a><span>FOCUS 3 / UNIT 4</span><button type="button" id="rulesBtn">Ściąga z zasad</button></header>
+<main>
+<section id="home">
+<div class="intro"><p class="eyebrow">NAUKOGRAMY • ANGIELSKI</p><h1>UNIT <em>4</em> <span>QUEST</span></h1><p class="tagline">Eat, drink and be healthy</p><p class="desc">Osiem etapów. Słówka, gramatyka, czytanie, pytania pośrednie i rozmowa w restauracji. Rozwiązuj po jednym dziale albo podejmij wyzwanie z całego podręcznika.</p></div>
+<div class="setup"><label>Gracz<select id="player"><option>Gaba</option><option>Iga</option><option>Krzysiek</option><option>Aga</option><option>Gość</option></select></label><label>Tryb<select id="mode"><option value="learn">Trening — podpowiedzi i objaśnienia</option><option value="exam">Sprawdzian — bez podpowiedzi</option></select></label></div>
+<div class="startbar"><button class="primary" id="fullStart">PEŁNA MISJA · 116 ZADAŃ</button><button id="quickStart">Szybki test · 24 pytania</button></div>
+<p class="hintline">Postęp zapisywany lokalnie w przeglądarce. Wynik po ukończeniu. Ćwiczenia ze słuchania zastąpione czytanką — bez nagrań audio.</p>
+<h2 class="sectitle">Wybierz dział</h2><div class="levels" id="levels"></div><div class="history" id="history"></div>
+</section>
+<section id="game" hidden>
+<div class="hud"><button id="exit">← Menu</button><div class="hudmiddle"><strong id="sectionLabel"></strong><span id="counter"></span></div><span id="points"></span></div>
+<div class="progress"><div id="progressBar"></div></div>
+<div class="statline"><span id="streak"></span><span id="timer"></span></div>
+<article class="question"><p id="qType" class="qmeta"></p><div id="passage" hidden></div><h2 id="prompt"></h2><p id="instructions"></p><div id="answerArea"></div><div class="controls"><button id="hintBtn">Podpowiedź</button><button class="primary" id="checkBtn">Sprawdź odpowiedź</button></div><p id="hintBody" class="hintbox" hidden></p><div id="feedback" role="status" aria-live="polite" hidden></div><button id="nextBtn" class="primary full" hidden>Następne</button></article>
+</section>
+<section id="result" hidden></section>
+</main>
+<dialog id="rules"><div class="dialoghead"><h2>Powtórka przed testem</h2><button id="closeRules">Zamknij</button></div><div id="ruleContent"></div></dialog>
+<footer>Unit 4 Quest · ćwiczenia autorskie oparte na zakresie Focus 3 Second Edition · <a href="../future-quest/">Future Quest</a></footer>
+<script src="data-a.js"></script><script src="data-b.js"></script><script src="app.js"></script>
+</body></html>
